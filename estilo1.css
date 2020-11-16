@@ -1,0 +1,17 @@
+a img{
+    width: 90px;
+    height: 80px;
+    border: double;
+}
+
+.d-block{
+    height:60vh;
+}
+
+.rodape{
+    height:20vh;
+}
+
+.contato{
+    border: double;
+}
