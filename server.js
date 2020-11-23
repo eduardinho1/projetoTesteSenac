@@ -5,8 +5,12 @@ const app = express()
 
 app.listen(80);
 
-app.get("/template1", function(req,res){
-        res.render("templete1")
+app.get("/", function(req,res){
+        res.render("template1")
+})
+
+app.get("/template1",function(req,res){
+        res.render('template1')
 })
 
 app.get('/login',function(req,res){
@@ -14,20 +18,48 @@ app.get('/login',function(req,res){
 })
 
 app.get("/CadastroUsuario", function(req,res){
-        res.send("cadastro para os Usuario")
+        res.render("cadastroUsuario")
 })
 
 app.get("/cadastroOng", function(req,res){
-        res.send("cadastro para as Ong")
+        res.render("cadastroOng")
 })
 
-app.get("/doacoes", function(req,res){
-        res.send("Doação")
+app.get("/doacao", function(req,res){
+        res.render("doacao")
 })
 
-app.get("/formasDeContato", function(req,res){
-        res.send("outras formas para falar conosco")
+app.get("/alimentos",function(req,res){
+        res.render('alimentos')
 })
+
+app.get("/brinquedos",function(req,res){
+        res.render('roupas')
+})
+
+app.get("/roupas",function(req,res){
+        res.render('roupas')
+})
+
+app.get("/dinheiro",function(req,res){
+        res.render('dinheiro')
+})
+
+app.get("/outros",function(req,res){
+        res.render('outros')
+})
+
+app.get("/Ajuda", function(req,res){
+        res.render("Ajuda")
+})
+
+app.get("/esqueceuSenha", function(req,res){
+        res.render("esqueceuSenha")
+})
+
+
+app.use('/static', express.static(__dirname + '/public'));
+
 
 
 
