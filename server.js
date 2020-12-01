@@ -3,7 +3,7 @@ const usuario = require("./models/usuario")
 const express = require("express")
 const app = express()
 
-app.listen(80);
+app.listen(3000);
 
 app.get("/", function(req,res){
         res.render("template1")
@@ -77,9 +77,14 @@ app.use(bodyParser.json())
 app.post('/cadUsuario',function(req,res){
         usuario.create({
                 nome:req.body.nome,
-                senha:req.body.senha
+                senha:req.body.senha,
+                Email:req.body.Email,
+                Endereco1:req.body.Endereco1,
+                endereco2:req.body.endereco2,
+                estado:req.body.estado,
+                cidade:req.body.cidade
         }).then(function(){
-                res.send("Cadastro com Sucesso")
+                res.render('template1')
         }).catch(function(){
                 res.send("Erro"+erro)
         })
