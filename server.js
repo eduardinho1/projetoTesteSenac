@@ -1,5 +1,7 @@
 const usuario = require("./models/usuario")
 
+const Ong = require("./models/Ong")
+
 const express = require("express")
 const app = express()
 
@@ -22,7 +24,9 @@ app.get("/CadastroUsuario", function(req,res){
 })
 
 app.get("/cadastroOng", function(req,res){
-        res.render("cadastroOng")
+        Ong.findAll().then(function(doadores){ 
+        res.render('cadastroOng',{doador: doadores.map(pagamento =>pagamento.toJSON())})
+        })
 })
 
 app.get("/doacao", function(req,res){
@@ -84,7 +88,25 @@ app.post('/cadUsuario',function(req,res){
                 estado:req.body.estado,
                 cidade:req.body.cidade
         }).then(function(){
-                res.render('template1')
+                res.render('login')
+        }).catch(function(){
+                res.send("Erro"+erro)
+        })
+})
+
+app.post('/cadOng',function(req,res){
+        Ong.create({
+           nomeOng:req.body.nomeOng,
+           cnpj:req.body.cnpj,
+           dataFundacao:req.body.dataFuncao,
+           email:req.body.email,
+           senha:req.body.senha,
+           estado:req.body.estado,
+           cidade:req.body.cidade,
+           endereco1:req.body.endereco1,
+           endereco2:req.body.endereco2    
+        }).then(function(){
+                res.render('login')
         }).catch(function(){
                 res.send("Erro"+erro)
         })

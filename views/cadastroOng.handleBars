@@ -3,54 +3,55 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-primary">  
         <a class="navbar-brand" href="template1" > <img src="static/img/logoOng2.png" class='border border-success' alt="">CADASTRO PARA ONG</a></nav>
 
-    <form class="CadastroOng">
+    <form action="/cadOng" method="POST" class="CadastroOng">
         <form>
           
           <div class="form-group">
             <label for="inputAddress2">Nome da ONG</label>
-            <input type="text" class="form-control" id="inputAddress2" placeholder="digite o nome">
+            <input name="nomeOng" type="text" class="form-control" id="inputAddress2" placeholder="digite o nome">
           </div>
 
            <div class="form-group">
             <label for="inputAddress2">CNPJ</label>
-            <input type="number" class="form-control" id="numeric" placeholder="somente números">
+            <input name="cnpj" type="number" class="form-control" id="numeric" placeholder="somente números">
           </div>
 
           <div class="form-group">
             <label for="inputAddress2">Data de fundação da Ong</label>
-            <input type="date" class="form-control" id="numeric" placeholder="somente números">
+            <input name="dataFundacao" type="date" class="form-control" id="numeric" placeholder="somente números">
           </div>
           
         <div class="form-row">
           <div class="form-group col-md-6">
             <label for="inputEmail4">Email</label>
-            <input type="email" class="form-control" id="inputEmail4">
+            <input name="email" type="email" class="form-control" id="inputEmail4">
           </div>
 
           <div class="form-group col-md-6">
             <label for="inputPassword4">Senha</label>
-            <input type="password" class="form-control" id="inputPassword4">
+            <input name="senha" type="password" class="form-control" id="inputPassword4">
           </div>
         </div>
 
         <div class="form-group">
           <label for="inputAddress">Endereço</label>
-          <input type="text" class="form-control" id="inputAddress" placeholder="endereço principal">
+          <input name="endereco1" type="text" class="form-control" id="inputAddress" placeholder="endereço principal">
         </div>
 
           <div class="form-group">
           <label for="inputAddress">Outros Endereços</label>
-          <input type="text" class="form-control" id="inputAddress" placeholder="outros endereços">
+          <input name="endereco2" type="text" class="form-control" id="inputAddress" placeholder="outros endereços">
         </div>
         
         <div class="form-row">
           <div class="form-group col-md-6">
-            <label for="inputCity">Cidade</label>
-            <input type="text" class="form-control" id="inputCity">
+            <label for="inputCity">cidade</label>
+            <input name="cidade" type="text" class="form-control" id="inputCity">
           </div>
+
           <div class="form-group col-md-6">
-            <label for="inputState">Estado</label>
-            <select id="inputState" class="form-control">
+            <label  for="inputState">Estado</label>
+            <select name="estado" id="inputState" class="form-control">
               <option selected>Acre(AC)</option>
               <option>Alagoas(AL)</option>
               <option>Amapá(AP)</option>
@@ -95,5 +96,25 @@
         <button type="submit" class="btn btn-primary">prosseguir</button>
       </form>
       </form>
+
+
+<table class="table">
+  <tr>
+    <th>Nome</th>
+    <th>senha</th>
+    <th>cnpj</th>
+    <th>atualizar</th>
+    <th>excluir</th>
+  </tr>
+  {{#each doador}}
+    <tr>
+      <th>{{nomeOng}}</th>
+      <th>{{senha}}</th>
+      <th>{{cnpj}}</th>
+      <th><a href="#">modificar</a></th>
+      <th><a href="#"></a>apagar</th>
+    </tr>
+  {{/each}}
+</table>
       
       
