@@ -10,6 +10,9 @@ const usuario = db.sequelize.define('usuarios' ,{
     Email: {
         type:db.Sequelize.STRING
     },
+    cpf: {
+        type:db.Sequelize.STRING
+    },
     Endereco1: {
         type:db.Sequelize.STRING
     },

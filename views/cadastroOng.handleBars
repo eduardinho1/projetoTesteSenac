@@ -1,14 +1,14 @@
   
   
   <nav class="navbar navbar-expand-lg navbar-light bg-primary">  
-        <a class="navbar-brand" href="template1" > <img src="static/img/logoOng2.png" class='border border-success' alt="">CADASTRO PARA ONG</a></nav>
+        <a class="navbar-brand" href="template1" > <img src="/static/img/logoOng2.png" class='border border-success' alt="">CADASTRO PARA ONG</a>
 
-    <form action="/cadOng" method="POST" class="CadastroOng">
-        <form>
-          
+    </nav>
+            <form action="/cadOng" method="POST" >
+        
           <div class="form-group">
             <label for="inputAddress2">Nome da ONG</label>
-            <input name="nomeOng" type="text" class="form-control" id="inputAddress2" placeholder="digite o nome">
+            <input name="nomeOng" type="text" class="form-control" id="inputAddress0" placeholder="digite o nome">
           </div>
 
            <div class="form-group">
@@ -18,13 +18,13 @@
 
           <div class="form-group">
             <label for="inputAddress2">Data de fundação da Ong</label>
-            <input name="dataFundacao" type="date" class="form-control" id="numeric" placeholder="somente números">
+            <input name="dataFundacao" type="date" class="form-control" id="numeric1" placeholder="somente números">
           </div>
           
         <div class="form-row">
           <div class="form-group col-md-6">
             <label for="inputEmail4">Email</label>
-            <input name="email" type="email" class="form-control" id="inputEmail4">
+            <input name="email" type="email" class="form-control" id="inputEmail2">
           </div>
 
           <div class="form-group col-md-6">
@@ -35,12 +35,12 @@
 
         <div class="form-group">
           <label for="inputAddress">Endereço</label>
-          <input name="endereco1" type="text" class="form-control" id="inputAddress" placeholder="endereço principal">
+          <input name="endereco1" type="text" class="form-control" id="inputAddress1" placeholder="endereço principal">
         </div>
 
           <div class="form-group">
           <label for="inputAddress">Outros Endereços</label>
-          <input name="endereco2" type="text" class="form-control" id="inputAddress" placeholder="outros endereços">
+          <input name="endereco2" type="text" class="form-control" id="inputAddress2" placeholder="outros endereços">
         </div>
         
         <div class="form-row">
@@ -95,7 +95,7 @@
         </div>
         <button type="submit" class="btn btn-primary">prosseguir</button>
       </form>
-      </form>
+      
 
 
 <table class="table">
@@ -108,11 +108,11 @@
   </tr>
   {{#each doador}}
     <tr>
-      <th>{{nomeOng}}</th>
-      <th>{{senha}}</th>
-      <th>{{cnpj}}</th>
-      <th><a href="#">modificar</a></th>
-      <th><a href="#"></a>apagar</th>
+      <td>{{nomeOng}}</td>
+      <td>{{senha}}</td>
+      <td>{{cnpj}}</td>
+      <td><a href="/update/{{id}}">atualizar</a></td>
+      <td><a href="/apaga/{{id}}">Apagar</a></td>
     </tr>
   {{/each}}
 </table>

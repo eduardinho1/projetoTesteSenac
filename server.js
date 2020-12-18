@@ -19,8 +19,15 @@ app.get('/login',function(req,res){
         res.render("login")
 })
 
-app.get("/CadastroUsuario", function(req,res){
-        res.render("cadastroUsuario")
+app.get('/escolhaTipo',function(req,res){
+        res.render("escolhaTipo")
+})
+
+
+app.get("/cadastroUsuario", function(req,res){
+        usuario.findAll().then(function(doadores){ 
+        res.render('cadastroUsuario',{doador: doadores.map(pagamento =>pagamento.toJSON())})
+        })
 })
 
 app.get("/cadastroOng", function(req,res){
@@ -61,6 +68,15 @@ app.get("/esqueceuSenha", function(req,res){
         res.render("esqueceuSenha")
 })
 
+app.get("/meuPerfil", function(req,res){
+        res.render("meuPerfil")
+})
+
+app.get("/nossasOng", function(req,res){
+        res.render("nossasOng")
+})
+
+
 
 app.use('/static', express.static(__dirname + '/public'));
 
@@ -83,6 +99,7 @@ app.post('/cadUsuario',function(req,res){
                 nome:req.body.nome,
                 senha:req.body.senha,
                 Email:req.body.Email,
+                cpf:req.body.cpf,
                 Endereco1:req.body.Endereco1,
                 endereco2:req.body.endereco2,
                 estado:req.body.estado,
@@ -110,4 +127,49 @@ app.post('/cadOng',function(req,res){
         }).catch(function(){
                 res.send("Erro"+erro)
         })
+})
+
+app.get('/delete/:id', function(req,res){
+        usuario.destroy({
+            where:{'id': req.params.id}
+        }).then(function(){
+            usuario.findAll().then(function(doadores){
+                res.render('cadastroUsuario', {doador: doadores.map(pagamento => pagamento.toJSON())})
+            })
+    
+        .catch(function(){res.send("não deu certo")})
+        })
+    })
+
+    app.get('/apaga/:id', function(req,res){
+        Ong.destroy({
+            where:{'id': req.params.id}
+        }).then(function(){
+            Ong.findAll().then(function(doadores){
+                res.render('cadastroOng', {doador: doadores.map(pagamento => pagamento.toJSON())})
+            })
+    
+        .catch(function(){res.send("não deu certo")})
+        })
+    })
+
+app.get('/update/:id', function(req,res){
+        usuario.findAll({ where:{'id': req.params.id}}).then(function(doadores){
+                res.render('atualiza',{doador: doadores.map(pagamento => pagamento.toJSON())})
+        })
+})
+
+app.post('/updateUsuario', function(req,res){
+        usuario.update({nome: req.body.nome, senha:req.body.senha},{
+                where:{id:req.body.codigo}}
+        ).then(function(){
+                usuario.findAll().then(function(doadores){
+                res.render('cadastroUsuario',{doador: doadores.map(pagamento => pagamento.toJSON())})
+
+                }).catch(function(erro){
+                        res.send("Erro "+erro)
+                })
+        })
+         
+        
 })
