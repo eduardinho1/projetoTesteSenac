@@ -1,0 +1,21 @@
+<h1>atualização de produtos</h1>
+{{#each produtos}}
+      <div class="container">
+    <form action="/updateProdutos" method="POST">
+    <input type="texte" name="codigo" readonly="true" value={{id}}>
+    <div class="form-group">
+            <label  for="inputAlimento">Categoria de Doação</label>
+            <select name="categoriaDoacao" id="inputAlimento" class="form-control">
+              <option  value="1">Alimentos</option>
+              <option value="2">Brinquedos</option>
+              <option value="3">Roupas</option>
+              <option value="4">Doações em dinheiro</option>
+              <option value="5">Outros...</option>
+            </select value={{categoriaDoacao}}>
+          </div>
+
+    <input type="text" name="nomeProduto" value={{nomeProduto}}>
+    <input type="submit" name="conectar">   
+    </form>
+    </div>
+    {{/each}}

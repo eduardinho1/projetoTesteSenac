@@ -1,0 +1,76 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-primary">  
+        <a class="navbar-brand" href="/template1" >  <img src="/static/img/logoONg2.png"  class='border border-success'alt=""> CADASTRO DE DOAÇÕES</a>
+        
+</nav>
+
+<div class="container">
+  <!--Bloco responsavel pelo armazenamento dos dados em suas devidas variaveis -->
+   <form action="/cadProdutos" method="POST" >
+   <!--/////////////////////////////////////////////////////////////////////// -->
+<div class="form-group">
+            <label  for="inputAlimento">Categoria de Doação</label>
+            <select name="categoriaDoacao" id="inputAlimento" class="form-control">
+              <option value="1">Alimentos</option>
+              <option value="2">Brinquedos</option>
+              <option value="3">Roupas</option>
+              <option value="4">Doações em dinheiro</option>
+              <option value="5">Outros...</option>
+            </select>
+          </div>
+
+<div class="form-group">
+          <label for="inputNome">Nome da doação requisitada</label>
+          <input name="nomeProduto" type="text" class="form-control" id="inputAddress" placeholder="ex: feijão, arroz etc">
+        </div>
+
+ <div class="form-group">
+          <label for="inputQuantidade">Quantidade</label>
+          <input name="quantidade" type="text" class="form-control" id="inputAddress2">
+        </div>
+
+  <select class="form-select form-group" name="prioridade" aria-label="Default select example">
+    <option disabled selected> prioridade </option>
+    <option value="1">baixa</option>
+    <option value="2">média</option>
+    <option value="3">Alta</option>
+  </select>
+  
+  <div class="form-group">
+    <input class="btn btn-primary" type="submit" value="enviar">
+  </div>
+
+</div>
+
+
+<table class="table">
+  <tr>
+    <th>categoriaDoacao</th>
+    <th>nomeProduto</th>
+    <th>quantidade</th>
+    <th>prioridade</th>
+    <th>atualizar</th>
+    <th>excluir</th>
+  </tr>
+  {{#each produtos}}
+    <tr>
+      <td>{{categoriaDoacao}}</td>
+      <td>{{nomeProduto}}</td>
+      <td>{{quantidade}}</td>
+      <td>{{prioridade}}</td>
+      <td><a href="/updateProdutos/{{id}}">atualizar</a></td>
+      <td><a href="/apaga1/{{id}}">apagar</a></td>
+    </tr>
+  {{/each}}
+</table>
+
+
+
+
+
+
+
+  
+
+
+
+

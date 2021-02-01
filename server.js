@@ -2,11 +2,26 @@ const usuario = require("./models/usuario")
 
 const Ong = require("./models/Ong")
 
+const produtos = require("./models/cadastroProdutos")
+
+//contante responsavél pela conexão com o express. 
 const express = require("express")
 const app = express()
 
-app.listen(3000);
+//Configuração do login usando session
+//Session é reponsavél por hospedar a sessão de cada usuario usando express-session
+var session = require('express-session');
 
+app.use(session({
+        secret: 'secret',
+        resave: true,
+        saveUninitialized: true
+}));
+
+//req : Recebe do front-end e res: envia para o front-end.
+// render: renderisa a rota e send: somente indica o nome mas não renderisa.
+//findAll(): lista todos os dados do fórmulario.
+//Configuração das rotas
 app.get("/", function(req,res){
         res.render("template1")
 })
@@ -45,7 +60,7 @@ app.get("/alimentos",function(req,res){
 })
 
 app.get("/brinquedos",function(req,res){
-        res.render('roupas')
+        res.render('brinquedos')
 })
 
 app.get("/roupas",function(req,res){
@@ -69,29 +84,47 @@ app.get("/esqueceuSenha", function(req,res){
 })
 
 app.get("/meuPerfil", function(req,res){
-        res.render("meuPerfil")
+        if(req.session.nome){
+                usuario.findAll().then(function(usuario){
+                res.render('meuPerfil', {usuario: usuario.map(pagameto => pagameto.toJSON())})
+         })
+}else{
+        res.render('login');
+}
+
+
 })
 
 app.get("/nossasOng", function(req,res){
         res.render("nossasOng")
 })
 
+app.get("/cadastroProdutos", function(req,res){
+        produtos.findAll().then(function(produtos){ 
+        res.render('cadastroProdutos',{produtos: produtos.map(pagamento =>pagamento.toJSON())})
+        })
+})
 
 
+//----------------------------------------------------
+
+
+// Rota para se fazer possivel o CSS e colocar as imagens
 app.use('/static', express.static(__dirname + '/public'));
 
 
 
-
+//constantes responsaveis pela ospedagem do handleBars com express e body-parser.
 const handlebars = require("express-handlebars")
 const bodyParser = require("body-parser")
 
-//configuração handlebars para 
+//configuração handlebars para criar o main.
 app.engine('handlebars', handlebars({defaultLayout:'main'}))
 app.set("view engine",'handlebars')
 
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json())
+
 
 //esse bloco é disparado pelo enviar do formulario
 app.post('/cadUsuario',function(req,res){
@@ -129,6 +162,22 @@ app.post('/cadOng',function(req,res){
         })
 })
 
+app.post('/cadProdutos', function(req,res){
+        produtos.create({
+                categoriaDoacao:req.body.categoriaDoacao,
+                nomeProduto:req.body.nomeProduto,
+                quantidade:req.body.quantidade,
+                prioridade:req.body.prioridade
+        }).then(function(){
+                res.render('doacao')
+        }).catch(function(){
+                res.send("Erro"+erro)
+        })
+})
+//-------------------------------------------------------------------------------------------------
+
+
+//este bloco é responsavél por deletar os cadastro de seus respectivos formularios 
 app.get('/delete/:id', function(req,res){
         usuario.destroy({
             where:{'id': req.params.id}
@@ -153,11 +202,34 @@ app.get('/delete/:id', function(req,res){
         })
     })
 
+    app.get('/apaga1/:id', function(req,res){
+        produtos.destroy({
+            where:{'id': req.params.id}
+        }).then(function(){
+        produtos.findAll().then(function(produtos){
+                res.render('cadastroProdutos', {produtos: produtos.map(pagamento => pagamento.toJSON())})
+            })
+    
+        .catch(function(){res.send("não deu certo")})
+        })
+    })
+
+    
+//--------------------------------------------------------------------------------------------------------
+
+//este bloco é responsavel por modificar/alterar os cadastros de seus respectivos formularios/tabelas.
 app.get('/update/:id', function(req,res){
         usuario.findAll({ where:{'id': req.params.id}}).then(function(doadores){
                 res.render('atualiza',{doador: doadores.map(pagamento => pagamento.toJSON())})
         })
 })
+
+app.get('/updateProdutos/:id', function(req,res){
+        produtos.findAll({ where:{'id': req.params.id}}).then(function(produtos){
+                res.render('atualizaProdutos',{produtos: produtos.map(pagamento => pagamento.toJSON())})
+        })
+})
+
 
 app.post('/updateUsuario', function(req,res){
         usuario.update({nome: req.body.nome, senha:req.body.senha},{
@@ -173,3 +245,57 @@ app.post('/updateUsuario', function(req,res){
          
         
 })
+
+app.post('/updateProdutos', function(req,res){
+        produtos.update({ categoriaDoacao:req.body.categoriaDoacao, nomeProduto:req.body.nomeProduto,},{
+                where:{id:req.body.codigo}}
+        ).then(function(){
+                produtos.findAll().then(function(produtos){
+                res.render('cadastroProdutos',{produtos: produtos.map(pagamento => pagamento.toJSON())})
+
+                }).catch(function(erro){
+                        res.send("Erro "+erro)
+                })
+        })
+         
+        
+})
+
+
+//-------------------------------------------------------------------------------------
+
+//Isso faz login sem consultar se o usuario existe só checando as informação que estão aqui!
+/*app.post('/cadLogin', function(req,res){ 
+        req.session.nome= 'andre';
+        req.session.senha= 'repolho123'
+
+        if(req.session.nome == req.body.nome && req.body.senha == 'repolho123'){
+                res.send("usuario ligado")
+        }else{
+                res.send("usuario não concectado")
+  }
+})*/
+
+//Isso faz login conferindo no banco de dados se o usuario existe e inicia a sessão!
+app.post('/cadLogin', function(req,res){
+        req.session.nome = req.body.nome;
+ usuario.count({where: {nome: req.session.nome}}).then(function(dados){
+         if(dados >= 1){
+                 res.render('template1')
+         }else{
+                 res.send('usuario não cadastrado' + dados)
+         }
+ }) 
+
+});
+
+//Isso faz logoff desfazendo a função!
+app.get('/logoff', function(req,res){
+        req.session.destroy(function(){
+                res.render('template1')
+        })
+})
+
+
+//--------------------------------------------------------------------------------------
+app.listen(3000);
