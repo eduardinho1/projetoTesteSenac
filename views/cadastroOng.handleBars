@@ -1,120 +1,79 @@
   
-  
-  <nav class="navbar navbar-expand-lg navbar-light bg-primary">  
-        <a class="navbar-brand" href="template1" > <img src="/static/img/logoOng2.png" class='border border-success' alt="">CADASTRO PARA ONG</a>
+  <br>
+<div class="container">
+  <div class="card">
+    <div class="card-header car">
+    <h1>CADASTRO PARA ONGs
+    </h1>  
+    </div>
+            <form action="/cadUsuario" method="POST" enctype="multipart/form-data">
 
-    </nav>
-            <form action="/cadOng" method="POST" >
+          <input name="colocarImagem" type="file" class="form-group" >
         
           <div class="form-group">
             <label for="inputAddress2">Nome da ONG</label>
-            <input name="nomeOng" type="text" class="form-control" id="inputAddress0" placeholder="digite o nome">
+            <input name="nome" type="text" class="form-control" id="inputAddress0" placeholder="digite o nome" required>
           </div>
 
            <div class="form-group">
             <label for="inputAddress2">CNPJ</label>
-            <input name="cnpj" type="number" class="form-control" id="numeric" placeholder="somente números">
+            <input name="cnpj" type="number" class="form-control" id="numeric" placeholder="somente números" required>
           </div>
 
-          <div class="form-group">
-            <label for="inputAddress2">Data de fundação da Ong</label>
-            <input name="dataFundacao" type="date" class="form-control" id="numeric1" placeholder="somente números">
-          </div>
           
         <div class="form-row">
           <div class="form-group col-md-6">
             <label for="inputEmail4">Email</label>
-            <input name="email" type="email" class="form-control" id="inputEmail2">
+            <input name="Email" type="email" class="form-control" id="inputEmail2" required>
           </div>
 
           <div class="form-group col-md-6">
             <label for="inputPassword4">Senha</label>
-            <input name="senha" type="password" class="form-control" id="inputPassword4">
+            <input name="senha" type="password"  rows="10" cols="70" class="form-control" id="inputPassword4">
           </div>
-        </div>
-
-        <div class="form-group">
-          <label for="inputAddress">Endereço</label>
-          <input name="endereco1" type="text" class="form-control" id="inputAddress1" placeholder="endereço principal">
-        </div>
-
-          <div class="form-group">
-          <label for="inputAddress">Outros Endereços</label>
-          <input name="endereco2" type="text" class="form-control" id="inputAddress2" placeholder="outros endereços">
         </div>
         
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label for="inputCity">cidade</label>
-            <input name="cidade" type="text" class="form-control" id="inputCity">
-          </div>
-
-          <div class="form-group col-md-6">
-            <label  for="inputState">Estado</label>
-            <select name="estado" id="inputState" class="form-control">
-              <option selected>Acre(AC)</option>
-              <option>Alagoas(AL)</option>
-              <option>Amapá(AP)</option>
-              <option>Amazonas(AM)</option>
-              <option>Bahia(BA)</option>
-              <option>Ceará(CE)</option>
-              <option>Distrito Federal(DF)</option>
-              <option>Espírito Santo(ES)</option>
-              <option>Goiás(GO)</option>
-              <option>Maranhão(MA)</option>
-              <option>Mato Grosso(MT)</option>
-              <option>Mato Grosso do Sul(MT)</option>
-              <option>Minas Gerais(MG)</option>
-              <option>Pará(PA)</option>
-              <option>Paraíba(PB)</option>
-              <option>Paraná(PR)</option>
-              <option>Paraíba(PB)</option>
-              <option>Paraná(PR)</option>
-              <option>Pernambuco(PE)</option>
-              <option>Piauí(PI)</option>
-              <option>Rio de Janeiro(RJ)</option>
-              <option>Rio Grande do Norte(RN)</option>
-              <option>Rio Grande do Sul(RS)</option>
-              <option>Rondônia(RO)</option>
-              <option>Roraima(RR)</option>
-              <option>Santa Catarina(SC)</option>
-              <option>São Paulo(SP)</option>
-              <option>Sergipe(SE)</option>
-              <option>Tocantins(TO)</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="gridCheck">
-            <label class="form-check-label" for="gridCheck">
-              aceito
-            </label>
-          </div>
-        </div>
-        <button type="submit" class="btn btn-primary">prosseguir</button>
-      </form>
       
+       <textarea name="descricao" rows="10" cols="70" class="form-group" placeholder="descrições sobre sua Ong exemplo: telefone,
+       endereço, hitoria, horario de funcionamento etc etc." required></textarea>
 
+        <input type="hidden" name="tipo" value="Ong">
 
-<table class="table">
+        <button type="submit" class="btn btn-primary form-group">prosseguir</button>
+      </form>
+      </div>
+
+<br>
+
+<div class="card-header bg-white">
+    <h1>banco de dados</h1> 
+  <table class="table">
   <tr>
+    <th>Imagem da Ong</th>
     <th>Nome</th>
     <th>senha</th>
     <th>cnpj</th>
+    <th>Email</th>
+    <th>descrição da Ong</th>
     <th>atualizar</th>
     <th>excluir</th>
   </tr>
   {{#each doador}}
     <tr>
-      <td>{{nomeOng}}</td>
+      <td><img src="static/img/{{colocarImagem}}"></td>
+      <td>{{nome}}</td>
       <td>{{senha}}</td>
       <td>{{cnpj}}</td>
-      <td><a href="/update/{{id}}">atualizar</a></td>
-      <td><a href="/apaga/{{id}}">Apagar</a></td>
+      <td>{{Email}}</td>
+      <td>{{descricao}}</td>
+      <td><button class="btn btn-secondary"><a href="/update/{{id}}" class="text-white" >
+      atualizar</a></button></td>
+      <td><a href="/delete/{{id}}">Apagar</a></td>
     </tr>
   {{/each}}
 </table>
+</div>
+</div>
+
       
       

@@ -1,0 +1,9 @@
+Função de login
+
+-Conferir se o cadastro foi previamente feito;
+
+-Proteger e conferir is níveis de usuario;
+
+-Fazer com que cada acesso seja efetuado o login, para que não seja possível a entrada de usuarios usando
+a URI de um login anteriormente feito.
+

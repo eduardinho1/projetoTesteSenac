@@ -1,0 +1,46 @@
+Inicio novamente do projeto.
+----Pensamento computacional.
+---Seguimento do Projeto Integrador.
+---Pensameto da continualidade do projeto e pensamento de datas.
+
+Cronograma de entrega. 
+
+>Documento continua o mesmo.
+
+>Renicialização do projeto. 
+
+>Inialização de um novo banco de dados.
+
+>Conexão com o banco de dados.
+
+>Definir a porta.
+
+>criar o html.
+
+>criar as rotas de cada pagina.
+
+>criar as condições no javascript.
+
+>Começar a implantação do CSS.
+
+>Criar as tabelas.
+
+>colocar as tabelas no banco de dados(create).
+
+>Começar com a primeira tabela o uso do Crud.
+
+>começar a implatação de novas tabelas, somente pelo html.
+
+>Ajustar e arrumar as tabelas da forma que se encaixe com a ideia do site.
+
+>Começar o uso de CRUD em todas tabelas.
+
+>Uso do CRUD.
+
+>Ajustar totalmente o CSS.
+
+>Testar as funções do site.
+
+>Conferir e faszer mais testes.
+
+>Fazer a entrega do site.

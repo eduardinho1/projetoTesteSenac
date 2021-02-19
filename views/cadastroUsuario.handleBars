@@ -1,12 +1,17 @@
 
-<nav class="navbar navbar-expand-lg navbar-light bg-primary">  
-        <a class="navbar-brand" href="/template1" >  <img src="/static/img/logoONg2.png"  class='border border-success'alt=""> CADASTRO DOADOR </a>
-    <form action="/cadUsuario" method="POST" >
-   
-</nav>
+ <br>
+<div class="container">
+  <div class="card">
+    <div class="card-header car">
+    <h1>CADASTRO PARA DOADORES
+    </h1> 
+    </div>
+
+    <form action="/cadDoador" method="POST" >
+
          <div class="form-group">
           <label for="inputNome">Nome Completo</label>
-          <input name="nome" type="text" class="form-control" id="inputAddress" placeholder="ex: Eduardo">
+          <input name="nome" type="text" class="form-control" id="inputAddress" placeholder="ex: Eduardo" required> 
         </div>
 
         <div class="form-row">
@@ -17,95 +22,41 @@
 
           <div class="form-group col-md-6">
             <label for="inputPassword4">Senha</label>
-            <input name="senha" type="password" class="form-control" id="inputPassword4">
+            <input name="senha" type="password" class="form-control" id="inputPassword4" required> 
           </div>
         </div>
 
-         <div class="form-group">
-            <label for="inputCpf">CPF</label>
-            <input name="cpf" type="number" class="form-control" id="numeric" placeholder="somente números">
-          </div>
+          <input type="hidden" name="tipo" value="doador">
 
-        <div class="form-group">
-          <label for="inputAddress">Endereço</label>
-          <input name="Endereco1" type="text" class="form-control" id="inputAddress3" placeholder="endereço principal">
-        </div>
-        <div class="form-group">
-          <label for="inputAddress2">Endereço 2</label>
-          <input name="endereco2" type="text" class="form-control" id="inputAddress2" placeholder="Apartmento, studio, ou outros">
-        </div>
-
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label for="inputCity">Cidade</label>
-            <input name="cidade" type="text" class="form-control" id="inputCity">
-          </div>
-          <div class="form-group col-md-6">
-            <label for="inputState">Estado</label>
-            <select name="estado" id="inputState" class="form-control">
-              <option selected>Acre(AC)</option>
-              <option>Alagoas(AL)</option>
-              <option>Amapá(AP)</option>
-              <option>Amazonas(AM)</option>
-              <option>Bahia(BA)</option>
-              <option>Ceará(CE)</option>
-              <option>Distrito Federal(DF)</option>
-              <option>Espírito Santo(ES)</option>
-              <option>Goiás(GO)</option>
-              <option>Maranhão(MA)</option>
-              <option>Mato Grosso(MT)</option>
-              <option>Mato Grosso do Sul(MT)</option>
-              <option>Minas Gerais(MG)</option>
-              <option>Pará(PA)</option>
-              <option>Paraíba(PB)</option>
-              <option>Paraná(PR)</option>
-              <option>Paraíba(PB)</option>
-              <option>Paraná(PR)</option>
-              <option>Pernambuco(PE)</option>
-              <option>Piauí(PI)</option>
-              <option>Rio de Janeiro(RJ)</option>
-              <option>Rio Grande do Norte(RN)</option>
-              <option>Rio Grande do Sul(RS)</option>
-              <option>Rondônia(RO)</option>
-              <option>Roraima(RR)</option>
-              <option>Santa Catarina(SC)</option>
-              <option>São Paulo(SP)</option>
-              <option>Sergipe(SE)</option>
-              <option>Tocantins(TO)</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="gridCheck">
-            <label class="form-check-label" for="gridCheck">
-              aceito
-            </label>
-          </div>
-        </div>
-        <button type="submit" class="btn btn-primary">prosseguir</button>
+        
+        <button type="submit" class="btn btn-primary form-group">prosseguir</button>
       </form>
-      </nav>
+      </div>
 
+<br>
+
+<div class="card-header bg-white form-group">
+    <h1>banco de dados</h1> 
 <table class="table">
   <tr>
+    <th>tipo</th>
     <th>Nome</th>
     <th>Email</th>
     <th>senha</th>
-    <th>cpf</th>
     <th>atualizar</th>
     <th>excluir</th>
   </tr>
   {{#each doador}}
     <tr>
+      <td>{{tipo}}</td>
       <td>{{nome}}</td>
       <td>{{Email}}</td>
       <td>{{senha}}</td>
-      <td>{{cpf}}</td>
-      <td><a href="/update/{{id}}">atualizar</a></td>
+      <td><button class="btn btn-secondary"> <a href="/update/{{id}}" class="text-white"> 
+      atualizar</a></button></td>
       <td><a href="/delete/{{id}}">apagar</a></td>
     </tr>
   {{/each}}
 </table>
-       
+</div>
+</div>

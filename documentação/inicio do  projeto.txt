@@ -1,0 +1,13 @@
+dia 08/10/2020 inicio do projeto 18:55 
+
+---projeto se baseará de ajuda para Ongs---
+
+---cadastro para as ongs, falarem o que está em falta o que eles estão precisando 
+
+---validação do serviço por meio de CNPJ
+
+---População terá acesso e poderá ver o que eles estão precisando e como doar
+
+>>>vereficação de requisitos daqui uns dias
+
+requisitos irão ser decidos por meio de entrvista talvez questionario. 

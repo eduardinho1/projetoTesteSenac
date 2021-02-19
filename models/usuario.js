@@ -1,6 +1,9 @@
 const db = require('./db')
 
 const usuario = db.sequelize.define('usuarios' ,{
+    tipo: {
+        type:db.Sequelize.STRING
+    },
     nome:{
         type:db.Sequelize.STRING
     },
@@ -10,21 +13,16 @@ const usuario = db.sequelize.define('usuarios' ,{
     Email: {
         type:db.Sequelize.STRING
     },
-    cpf: {
+    cnpj: {
         type:db.Sequelize.STRING
     },
-    Endereco1: {
+    descricao: {
         type:db.Sequelize.STRING
     },
-    endereco2: {
-        type:db.Sequelize.STRING
-    },
-    estado: {
-        type:db.Sequelize.STRING
-    },
-    cidade: {
+    colocarImagem: {
         type:db.Sequelize.STRING
     }
+    
 
 })  
 

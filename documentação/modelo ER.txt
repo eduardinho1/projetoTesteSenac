@@ -1,0 +1,30 @@
+					ENTIDADE E RELACIONAMENTO 
+
+
+-Usuario/ong : idUsuario, tipo0/tipo1/tipo2, cpf/cnpj, dataNascimento/dataFundacao, nome, email, senha, estado, cidade, bairro, cep, numeroCasa, perfil; 
+
+-Doacoes: idDoacao, idUsuario, idCategoria, idProduto e status;
+
+-categorias: idCategoria, nomeCategoria;
+
+-produto: idProduto, idCategoria, nomeProduto;
+
+-cidade: idCidade, nome, estado, bairro, cep, numeroCasa;
+
+-estado: idEstado, nome, cidade ;
+
+
+*tipos de usuarios: 
+
+-tipo1: idUsuario, nome, email, cpf, dataNascimento;
+
+-tipo2: idUsuario, nome, cnpj, dataFundacao;
+
+
+
+
+*tipos de status: 
+
+-ativo: está sendo enviado;
+
+-inativo: quando chegou a Ong; 

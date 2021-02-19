@@ -1,0 +1,20 @@
+controle d epermissões para usuarios: 
+
+-As permissões para diferentes usuarios são de suma importancia para um sistema, pois são com elas
+que decidimos o que e qual permissão cada usuario irá ter dentro do sistema. Administrador
+pode ver e modificar tudo, pois foi ele quem desenvolveu o sistema e quem sabe como mudar cada parte
+de seu sistema. Ong tem acesso somente a mudar seus cadastro de doações pedidas, além de fotos de seus lugares.
+Doadores só deverão ter acesso a doar e ver seu próprio perfil onde estará contido informações como um registro das
+suas doações. 
+
+-Os usuarios devem estar em somente uma tabela sendo diferenciado pelo seu tipo;
+
+-Pode ser utilizado outra tabela de auxilio falando o que cada usuario é dentro do sistema>>>
+exemplo: usuario 1 tem a permissão de administrador, ou seja, pode modificar tudo dentro do sistema.
+
+-Tudo pode mudar conforme o jeito de sua modelagem, por exemplo...Você pode dar permissões através 
+do banco de dados como também pelos códigos, sendo de forma mais eficas dar permissões pelo banco de dados
+onde será mais eficas e flexivél. 
+
+
+

@@ -1,8 +1,27 @@
-<h1>A DECIDIR TAMBÉM</h1>
 
- <select class="form-select" aria-label="Default select example">
-    <option selected> Escolha a Prioridade</option>
-    <option value="1">baixa</option>
-    <option value="2">média</option>
-    <option value="3">Alta</option>
-  </select>
+<br>
+<div class="container-fluid">
+  <div class="card">
+    <div class="card-header car">
+    <h1>BRINQUEDOS
+    </h1>  
+    </div>
+<form action="/cadProdutos" method="POST" >
+<table class="table">
+  <tr>
+    <th>nomeProduto</th>
+    <th>quantidade</th>
+    <th>prioridade</th>
+    <th>Quero Doar</th>
+  </tr>
+  {{#each produtos}}
+    <tr>
+      <td>{{nomeProduto}}</td>
+      <td>{{quantidade}}</td>
+      <td>{{prioridade}}</td>
+      <td><button class="btn btn-secondary"> <a href="/" class=" text-white">Doar</a></button></td>
+    </tr>
+  {{/each}}
+</table>
+</form>
+</div>

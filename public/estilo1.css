@@ -11,7 +11,7 @@ a img{
 }
 
 .rodape{
-    height:20vh;
+    height:10vh;
 }
 
 
@@ -42,4 +42,13 @@ a img{
     margin-top:60px;
 }
 
+table img{
+    width:60px;
+    height:60px;
+}
+
+.card{
+    margin-left: 70px;
+    margin-right: 70px;
+}
 

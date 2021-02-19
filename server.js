@@ -4,9 +4,24 @@ const Ong = require("./models/Ong")
 
 const produtos = require("./models/cadastroProdutos")
 
+//criptografia de dados utilizando a ferramenta chamada criptoJS
+ const crypto = require("crypto-md5");
+
+
 //contante responsavél pela conexão com o express. 
 const express = require("express")
 const app = express()
+
+
+//configuração do multer que serve para fazer upload de arquivos, imagens etc
+const multer= require("multer")
+
+const storage  = multer.diskStorage({
+       destination:(req,file,cb) =>{cb(null, 'public/img')},
+       filename:(req,file,cb) => {cb(null,file.originalname)}
+})
+
+const upload = multer({storage})
 
 //Configuração do login usando session
 //Session é reponsavél por hospedar a sessão de cada usuario usando express-session
@@ -17,6 +32,8 @@ app.use(session({
         resave: true,
         saveUninitialized: true
 }));
+
+
 
 //req : Recebe do front-end e res: envia para o front-end.
 // render: renderisa a rota e send: somente indica o nome mas não renderisa.
@@ -46,33 +63,55 @@ app.get("/cadastroUsuario", function(req,res){
 })
 
 app.get("/cadastroOng", function(req,res){
-        Ong.findAll().then(function(doadores){ 
-        res.render('cadastroOng',{doador: doadores.map(pagamento =>pagamento.toJSON())})
+        usuario.findAll({
+                where:{'tipo': "Ong" }
+            }).then(function(doador){ 
+                res.render('cadastroOng',{doador: doador.map(pagamento =>pagamento.toJSON())})
+                })
         })
-})
 
 app.get("/doacao", function(req,res){
         res.render("doacao")
 })
 
 app.get("/alimentos",function(req,res){
-        res.render('alimentos')
+        produtos.findAll({
+                where:{'categoriaDoacao': "alimentos" }
+            }).then(function(produtos){ 
+                res.render('alimentos',{produtos: produtos.map(pagamento =>pagamento.toJSON())})
+                })
 })
 
 app.get("/brinquedos",function(req,res){
-        res.render('brinquedos')
+        produtos.findAll({
+        where:{'categoriaDoacao': "brinquedos" }
+            }).then(function(produtos){ 
+                res.render('brinquedos',{produtos: produtos.map(pagamento =>pagamento.toJSON())})
+                })
 })
 
 app.get("/roupas",function(req,res){
-        res.render('roupas')
+        produtos.findAll({
+         where:{'categoriaDoacao': "roupas" }
+            }).then(function(produtos){ 
+                res.render('roupas',{produtos: produtos.map(pagamento =>pagamento.toJSON())})
+                 })
 })
 
 app.get("/dinheiro",function(req,res){
-        res.render('dinheiro')
+        produtos.findAll({
+         where:{'categoriaDoacao': "doacaoEmDinheiro" }
+                }).then(function(produtos){ 
+                  res.render('dinheiro',{produtos: produtos.map(pagamento =>pagamento.toJSON())})
+                })
 })
 
-app.get("/outros",function(req,res){
-        res.render('outros')
+app.get("/animais",function(req,res){
+        produtos.findAll({
+         where:{'categoriaDoacao': "animais" }
+           }).then(function(produtos){ 
+                   res.render('animais',{produtos: produtos.map(pagamento =>pagamento.toJSON())})
+                  })
 })
 
 app.get("/Ajuda", function(req,res){
@@ -84,7 +123,7 @@ app.get("/esqueceuSenha", function(req,res){
 })
 
 app.get("/meuPerfil", function(req,res){
-        if(req.session.nome){
+        if(req.session.nome, req.session.senha){
                 usuario.findAll().then(function(usuario){
                 res.render('meuPerfil', {usuario: usuario.map(pagameto => pagameto.toJSON())})
          })
@@ -96,8 +135,12 @@ app.get("/meuPerfil", function(req,res){
 })
 
 app.get("/nossasOng", function(req,res){
-        res.render("nossasOng")
-})
+          usuario.findAll({
+                where:{'tipo': "Ong" }
+            }).then(function(doador){ 
+                res.render('nossasOng',{doador: doador.map(pagamento =>pagamento.toJSON())})
+                })
+        })
 
 app.get("/cadastroProdutos", function(req,res){
         produtos.findAll().then(function(produtos){ 
@@ -127,16 +170,17 @@ app.use(bodyParser.json())
 
 
 //esse bloco é disparado pelo enviar do formulario
-app.post('/cadUsuario',function(req,res){
+//upload é a constante do multer responsavél por colocar Imagens/arquivos.
+app.post('/cadUsuario',upload.single('colocarImagem'), function(req,res){
+        console.log(req.file.originalname);
         usuario.create({
+                tipo:req.body.tipo,
                 nome:req.body.nome,
-                senha:req.body.senha,
+                senha: crypto(req.body.senha),
                 Email:req.body.Email,
-                cpf:req.body.cpf,
-                Endereco1:req.body.Endereco1,
-                endereco2:req.body.endereco2,
-                estado:req.body.estado,
-                cidade:req.body.cidade
+                cnpj:req.body.cnpj,
+                descricao:req.body.descricao,
+                colocarImagem:req.file.originalname
         }).then(function(){
                 res.render('login')
         }).catch(function(){
@@ -144,23 +188,19 @@ app.post('/cadUsuario',function(req,res){
         })
 })
 
-app.post('/cadOng',function(req,res){
-        Ong.create({
-           nomeOng:req.body.nomeOng,
-           cnpj:req.body.cnpj,
-           dataFundacao:req.body.dataFuncao,
-           email:req.body.email,
-           senha:req.body.senha,
-           estado:req.body.estado,
-           cidade:req.body.cidade,
-           endereco1:req.body.endereco1,
-           endereco2:req.body.endereco2    
+app.post('/cadDoador',function(req,res){
+        usuario.create({
+                tipo:req.body.tipo,
+                nome:req.body.nome,
+                senha:crypto(req.body.senha),
+                Email:req.body.Email
         }).then(function(){
                 res.render('login')
         }).catch(function(){
                 res.send("Erro"+erro)
         })
 })
+
 
 app.post('/cadProdutos', function(req,res){
         produtos.create({
@@ -184,18 +224,6 @@ app.get('/delete/:id', function(req,res){
         }).then(function(){
             usuario.findAll().then(function(doadores){
                 res.render('cadastroUsuario', {doador: doadores.map(pagamento => pagamento.toJSON())})
-            })
-    
-        .catch(function(){res.send("não deu certo")})
-        })
-    })
-
-    app.get('/apaga/:id', function(req,res){
-        Ong.destroy({
-            where:{'id': req.params.id}
-        }).then(function(){
-            Ong.findAll().then(function(doadores){
-                res.render('cadastroOng', {doador: doadores.map(pagamento => pagamento.toJSON())})
             })
     
         .catch(function(){res.send("não deu certo")})
@@ -278,8 +306,9 @@ app.post('/updateProdutos', function(req,res){
 
 //Isso faz login conferindo no banco de dados se o usuario existe e inicia a sessão!
 app.post('/cadLogin', function(req,res){
-        req.session.nome = req.body.nome;
- usuario.count({where: {nome: req.session.nome}}).then(function(dados){
+        req.session.nome = req.body.nome
+        req.session.senha = crypto(req.body.senha);
+ usuario.count({where: {nome: req.session.nome, senha: req.session.senha}}).then(function(dados){
          if(dados >= 1){
                  res.render('template1')
          }else{

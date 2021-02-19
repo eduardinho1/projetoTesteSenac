@@ -1,10 +1,11 @@
-<div class="row">
-      <div class="col-md-4"></div>
-      <div class="col-md-4">
-    <nav class="navbar navbar-expand-lg navbar-light bg-primary login">  
-        <a class="navbar-brand" href="/template1" > <img src="/static/img/logoONg2.png" class=' border border-dark' alt="">  FAÇA SEU CADASTRO</a>
-        </nav>
 
+  <br>
+<div class="container">
+  <div class="card">
+    <div class="card-header car">
+    <h1>FAÇA SEU LOGIN
+    </h1> 
+    </div>   
         <form action="/cadLogin" method="POST" >
 
         <div class="form-group">
@@ -14,16 +15,18 @@
 
         <div class="form-group">
           <label for="exampleInputPassword1">senha</label>
-          <input name="senha" type="password" class="form-control" id="exampleInputPassword1">
+          <input name="senha" type="password" class="form-control" id="exampleInputPassword1" required>
         </div>
 
-        <button type="submit" class="btn btn-primary">confirmar</button>
-     
+        <button type="submit" class="btn btn-primary form-group">confirmar</button>
+
+
       <div class="dropdown-divider"></div>
-      <a class="dropdown-item text-secundary" href="/escolhaTipo">Não é cadastrado ? Faça seu cadastro agora</a>
-      <a class="dropdown-item " href="/esqueceuSenha">esqueceu a senha ?</a>
-    </div>
-    <div class="col-md-4"></div>
-    </div>
+      <a class="dropdown-item text-secundary form-group" href="/escolhaTipo">Não é cadastrado ? Faça seu cadastro agora</a>
+      <a class="dropdown-item form-group " href="/esqueceuSenha">esqueceu a senha ?</a>
+
+    </form>
+      </div>
+      </div>
     
   

@@ -1,20 +1,28 @@
 <h1>atualização de produtos</h1>
 {{#each produtos}}
-      <div class="container">
+      <div class="container-fluid">
     <form action="/updateProdutos" method="POST">
     <input type="texte" name="codigo" readonly="true" value={{id}}>
     <div class="form-group">
             <label  for="inputAlimento">Categoria de Doação</label>
             <select name="categoriaDoacao" id="inputAlimento" class="form-control">
-              <option  value="1">Alimentos</option>
-              <option value="2">Brinquedos</option>
-              <option value="3">Roupas</option>
-              <option value="4">Doações em dinheiro</option>
-              <option value="5">Outros...</option>
-            </select value={{categoriaDoacao}}>
+              <option  value="alimentos">Alimentos</option>
+              <option value="brinquedos">Brinquedos</option>
+              <option value="roupas">Roupas</option>
+              <option value="doacaoEmDinheiro">Doações em dinheiro</option>
+              <option value="animais">Animais</option>
+              <option value={{categoriaDoacao}} selected>{{categoriaDoacao}}</option>
+            </select >
           </div>
+      <select class="form-select form-group" name="prioridade" aria-label="Default select example">
+    <option disabled> prioridade </option>
+    <option value="baixa">baixa</option>
+    <option value="média">média</option>
+    <option value="alta">Alta</option>
+    <option value={{prioridade}} selected>{{prioridade}}</option>
+  </select>
 
-    <input type="text" name="nomeProduto" value={{nomeProduto}}>
+   <input type="text" name="nomeProduto" placeholder="nome do produto" value={{nomeProduto}}>
     <input type="submit" name="conectar">   
     </form>
     </div>

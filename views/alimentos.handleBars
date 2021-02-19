@@ -1,4 +1,28 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-primary">  
-        <a class="navbar-brand" href="template1" > <img src="/static/img/logoOng2.png" class='border border-success' alt="">Doação de alimentos</a>
 
-    </nav>
+
+<br>
+<div class="container-fluid">
+  <div class="card">
+    <div class="card-header car">
+    <h1>ALIMENTOS
+    </h1>  
+    </div>
+<form action="/cadProdutos" method="POST" >
+<table class="table">
+  <tr>
+    <th>nomeProduto</th>
+    <th>quantidade</th>
+    <th>prioridade</th>
+    <th>Quero doar</th>
+  </tr>
+  {{#each produtos}}
+    <tr>
+      <td>{{nomeProduto}}</td>
+      <td>{{quantidade}}</td>
+      <td>{{prioridade}}</td>
+      <td><button class="btn btn-secondary"> <a href="/" class=" text-white"> Doar</a></button></td>
+    </tr>
+  {{/each}}
+</table>
+</form>
+</div>
