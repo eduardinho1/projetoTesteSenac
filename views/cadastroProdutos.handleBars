@@ -41,6 +41,7 @@
   </div>
 </div>
 </div>
+</form>
 
 <br>
 <br>
@@ -63,13 +64,29 @@
       <td>{{quantidade}}</td>
       <td>{{prioridade}}</td>
       <td><button class="btn btn-secondary"><a href="/updateProdutos/{{id}}" class="text-white">atualizar</a></button></td>
-      <td><a href="/apaga1/{{id}}">apagar</a></td>
+       <td>
+        <form method="POST" action="/apaga1" style="display: inline;" onsubmit="confirmarDelecao(event, this)">
+
+          <input type="hidden" name="id" value="{{id}}">
+          <button class="btn btn-success">Excluir</button>
+                    
+        </form>    
+      </td>
     </tr>
   {{/each}}
 </table>
 </div>
 </div>
 
+<script>
+    function confirmarDelecao(event, form){
+        event.preventDefault();
+        var decision = confirm("Tem certeza em deletar essa categoria?")
+        if(decision){
+            form.submit();
+        }
+    }
+</script>
 
 
 

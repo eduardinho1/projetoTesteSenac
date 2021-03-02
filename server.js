@@ -12,7 +12,6 @@ const produtos = require("./models/cadastroProdutos")
 const express = require("express")
 const app = express()
 
-
 //configuração do multer que serve para fazer upload de arquivos, imagens etc
 const multer= require("multer")
 
@@ -32,6 +31,35 @@ app.use(session({
         resave: true,
         saveUninitialized: true
 }));
+
+//configuração do nodemailer para enviar o email de confirmação 
+
+const nodemailer = require("nodemailer")
+
+const transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false,
+        auth:{
+                user: "",
+                pass: ""        
+        },
+        tls: { rejectUnauthorized: false}
+});
+
+const mailOptions = {
+        from: 'eduardemeghetti@gmail.com',
+        to: 'jonatanbrunotec@gmail.com',
+        subject: 'E-mail foi enviado, eai recebeu?',
+        text: 'Bem facil né!'
+};
+
+transporter.sendMail(mailOptions, function(error, info){
+        if(error){
+                console.log(error)
+        }else{'email enviado:' + info.response};
+});
+
 
 
 
@@ -159,7 +187,8 @@ app.use('/static', express.static(__dirname + '/public'));
 
 //constantes responsaveis pela ospedagem do handleBars com express e body-parser.
 const handlebars = require("express-handlebars")
-const bodyParser = require("body-parser")
+const bodyParser = require("body-parser");
+const { ajaxTransport } = require("jquery");
 
 //configuração handlebars para criar o main.
 app.engine('handlebars', handlebars({defaultLayout:'main'}))
@@ -218,21 +247,33 @@ app.post('/cadProdutos', function(req,res){
 
 
 //este bloco é responsavél por deletar os cadastro de seus respectivos formularios 
-app.get('/delete/:id', function(req,res){
+app.post('/delete', function(req,res){
         usuario.destroy({
-            where:{'id': req.params.id}
-        }).then(function(){
-            usuario.findAll().then(function(doadores){
-                res.render('cadastroUsuario', {doador: doadores.map(pagamento => pagamento.toJSON())})
+                where:{'id': req.body.id}
+            }).then(function(){
+                usuario.findAll().then(function(doadores){
+                    res.render('cadastroUsuario', {doador: doadores.map(pagamento => pagamento.toJSON())})
+                })
+        
+            .catch(function(){res.send("não deu certo")})
             })
-    
-        .catch(function(){res.send("não deu certo")})
-        })
     })
 
-    app.get('/apaga1/:id', function(req,res){
+app.post('/delete1', function(req,res){
+        usuario.destroy({
+                where:{'id': req.body.id, 'tipo': 'Ong'}
+            }).then(function(){
+                usuario.findAll().then(function(doadores){
+                    res.render('cadastroOng', {doador: doadores.map(pagamento => pagamento.toJSON())})
+                })
+        
+            .catch(function(){res.send("não deu certo")})
+            })
+    })
+
+ app.post('/apaga1', function(req,res){
         produtos.destroy({
-            where:{'id': req.params.id}
+            where:{'id': req.body.id}
         }).then(function(){
         produtos.findAll().then(function(produtos){
                 res.render('cadastroProdutos', {produtos: produtos.map(pagamento => pagamento.toJSON())})

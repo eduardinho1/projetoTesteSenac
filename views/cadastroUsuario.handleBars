@@ -54,9 +54,29 @@
       <td>{{senha}}</td>
       <td><button class="btn btn-secondary"> <a href="/update/{{id}}" class="text-white"> 
       atualizar</a></button></td>
-      <td><a href="/delete/{{id}}">apagar</a></td>
+      <td>
+        <form method="POST" action="/delete" style="display: inline;" onsubmit="confirmarDelecao(event, this)">
+
+          <input type="hidden" name="id" value="{{id}}">
+          <button class="btn btn-success">Excluir</button>
+                    
+        </form> 
+        
+        </form>
+       
+      </td>
     </tr>
   {{/each}}
 </table>
 </div>
 </div>
+
+<script>
+    function confirmarDelecao(event, form){
+        event.preventDefault();
+        var decision = confirm("Tem certeza em deletar essa categoria?")
+        if(decision){
+            form.submit();
+        }
+    }
+</script>
