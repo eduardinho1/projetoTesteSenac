@@ -41,14 +41,15 @@ const transporter = nodemailer.createTransport({
         port: 587,
         secure: false,
         auth:{
-                user: "",
-                pass: ""        
+                user: "eduardomeneghettitec@gmail.com",
+                pass: "123eduardo"   
+                    
         },
         tls: { rejectUnauthorized: false}
 });
 
 const mailOptions = {
-        from: 'eduardemeghetti@gmail.com',
+        from: 'eduardomeneghettitec@gmail.com',
         to: 'jonatanbrunotec@gmail.com',
         subject: 'E-mail foi enviado, eai recebeu?',
         text: 'Bem facil né!'
@@ -171,9 +172,14 @@ app.get("/nossasOng", function(req,res){
         })
 
 app.get("/cadastroProdutos", function(req,res){
-        produtos.findAll().then(function(produtos){ 
-        res.render('cadastroProdutos',{produtos: produtos.map(pagamento =>pagamento.toJSON())})
-        })
+        if(req.session.nome, req.session.senha){
+                produtos.findAll().then(function(produtos){ 
+                        res.render('cadastroProdutos',{produtos: produtos.map(pagamento =>pagamento.toJSON())})
+                        })
+}else{
+        res.render('login');
+}
+
 })
 
 
@@ -201,7 +207,11 @@ app.use(bodyParser.json())
 //esse bloco é disparado pelo enviar do formulario
 //upload é a constante do multer responsavél por colocar Imagens/arquivos.
 app.post('/cadUsuario',upload.single('colocarImagem'), function(req,res){
-        console.log(req.file.originalname);
+        if(req.file){
+                var imagem = req.file.originalname
+        }else{
+                var imagem = "imagemerro.png"
+        }
         usuario.create({
                 tipo:req.body.tipo,
                 nome:req.body.nome,
@@ -209,7 +219,7 @@ app.post('/cadUsuario',upload.single('colocarImagem'), function(req,res){
                 Email:req.body.Email,
                 cnpj:req.body.cnpj,
                 descricao:req.body.descricao,
-                colocarImagem:req.file.originalname
+                colocarImagem:imagem
         }).then(function(){
                 res.render('login')
         }).catch(function(){
