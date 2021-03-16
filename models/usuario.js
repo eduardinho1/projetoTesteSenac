@@ -29,7 +29,7 @@ const usuario = db.sequelize.define('usuarios' ,{
 
 
 
-//Cria tabela= somente uma vez
+//Cria tabela= somente uma ve
 //usuario.sync({force:true})
 
 module.exports = usuario
