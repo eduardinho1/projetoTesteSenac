@@ -7,6 +7,14 @@ const produtos = require("./models/cadastroProdutos")
 //criptografia de dados utilizando a ferramenta chamada criptoJS
  const crypto = require("crypto-md5");
 
+//constantes responsaveis pela ospedagem do handleBars com express e body-parser.
+const handlebars = require("express-handlebars")
+const bodyParser = require("body-parser");
+const { ajaxTransport } = require("jquery");
+
+//configuração handlebars para criar o main.
+app.engine('handlebars', handlebars({defaultLayout:'main'}))
+app.set("view engine",'handlebars')
 
 //contante responsavél pela conexão com o express. 
 const express = require("express")
@@ -72,9 +80,6 @@ app.get("/", function(req,res){
         res.render("template1")
 })
 
-app.get("/template1",function(req,res){
-        res.render('template1')
-})
 
 app.get('/login',function(req,res){
         res.render("login")
@@ -189,16 +194,6 @@ app.get("/cadastroProdutos", function(req,res){
 // Rota para se fazer possivel o CSS e colocar as imagens
 app.use('/static', express.static(__dirname + '/public'));
 
-
-
-//constantes responsaveis pela ospedagem do handleBars com express e body-parser.
-const handlebars = require("express-handlebars")
-const bodyParser = require("body-parser");
-const { ajaxTransport } = require("jquery");
-
-//configuração handlebars para criar o main.
-app.engine('handlebars', handlebars({defaultLayout:'main'}))
-app.set("view engine",'handlebars')
 
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json())
