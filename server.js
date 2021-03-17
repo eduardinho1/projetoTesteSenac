@@ -7,6 +7,14 @@ const produtos = require("./models/cadastroProdutos")
 //criptografia de dados utilizando a ferramenta chamada criptoJS
  const crypto = require("crypto-md5");
 
+
+//contante responsavél pela conexão com o express. 
+const express = require("express")
+const app = express()
+
+//configuração do multer que serve para fazer upload de arquivos, imagens etc
+const multer= require("multer")
+
 //constantes responsaveis pela ospedagem do handleBars com express e body-parser.
 const handlebars = require("express-handlebars")
 const bodyParser = require("body-parser");
@@ -16,12 +24,9 @@ const { ajaxTransport } = require("jquery");
 app.engine('handlebars', handlebars({defaultLayout:'main'}))
 app.set("view engine",'handlebars')
 
-//contante responsavél pela conexão com o express. 
-const express = require("express")
-const app = express()
+app.use(bodyParser.urlencoded({extended:false}))
+app.use(bodyParser.json())
 
-//configuração do multer que serve para fazer upload de arquivos, imagens etc
-const multer= require("multer")
 
 const storage  = multer.diskStorage({
        destination:(req,file,cb) =>{cb(null, 'public/img')},
@@ -80,6 +85,10 @@ app.get("/", function(req,res){
         res.render("template1")
 })
 
+app.get("/template1",function(req,res){
+        res.render("template1")
+})
+
 
 app.get('/login',function(req,res){
         res.render("login")
@@ -91,17 +100,26 @@ app.get('/escolhaTipo',function(req,res){
 
 
 app.get("/cadastroUsuario", function(req,res){
-        usuario.findAll().then(function(doadores){ 
+        if(req.session.nome){
+        usuario.findAll({
+                where:{"nome": req.session.nome}
+        }).then(function(doadores){ 
         res.render('cadastroUsuario',{doador: doadores.map(pagamento =>pagamento.toJSON())})
         })
+        }else{
+        res.render("cadastroUsuario")
+        }
 })
 
 app.get("/cadastroOng", function(req,res){
+        if(req.session.nome){
         usuario.findAll({
-                where:{'tipo': "Ong" }
+                where:{'nome': req.session.nome }
             }).then(function(doador){ 
                 res.render('cadastroOng',{doador: doador.map(pagamento =>pagamento.toJSON())})
-                })
+                })}else{
+                res.render('cadastroOng')
+                }
         })
 
 app.get("/doacao", function(req,res){
@@ -195,10 +213,6 @@ app.get("/cadastroProdutos", function(req,res){
 app.use('/static', express.static(__dirname + '/public'));
 
 
-app.use(bodyParser.urlencoded({extended:false}))
-app.use(bodyParser.json())
-
-
 //esse bloco é disparado pelo enviar do formulario
 //upload é a constante do multer responsavél por colocar Imagens/arquivos.
 app.post('/cadUsuario',upload.single('colocarImagem'), function(req,res){
@@ -238,6 +252,7 @@ app.post('/cadDoador',function(req,res){
 
 app.post('/cadProdutos', function(req,res){
         produtos.create({
+                nomeOng:req.session.nome,
                 categoriaDoacao:req.body.categoriaDoacao,
                 nomeProduto:req.body.nomeProduto,
                 quantidade:req.body.quantidade,
