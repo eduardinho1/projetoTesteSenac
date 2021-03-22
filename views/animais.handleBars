@@ -10,17 +10,19 @@
 <form action="/cadProdutos" method="POST" >
 <table class="table">
   <tr>
-    <th>nomeProduto</th>
+    <th>nome Ong</th>
+    <th>nome Produto</th>
     <th>quantidade</th>
     <th>prioridade</th>
     <th>Quero doar</th>
   </tr>
   {{#each produtos}}
     <tr>
+      <td>{{nomeOng}}</td>
       <td>{{nomeProduto}}</td>
       <td>{{quantidade}}</td>
       <td>{{prioridade}}</td>
-      <td><button class="btn btn-secondary"> <a href="/" class=" text-white"> Doar</a></button></td>
+      <td><button class="btn btn-secondary"> <a href="listaOng/{{nomeOng}}" class="text-white">informações</a></button></td>
     </tr>
   {{/each}}
 </table>

@@ -16,6 +16,9 @@ const usuario = db.sequelize.define('usuarios' ,{
     cnpj: {
         type:db.Sequelize.STRING
     },
+    telefone: {
+        type:db.Sequelize.STRING
+    },
     descricao: {
         type:db.Sequelize.STRING
     },

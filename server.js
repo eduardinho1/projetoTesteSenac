@@ -194,16 +194,41 @@ app.get("/nossasOng", function(req,res){
                 })
         })
 
-app.get("/cadastroProdutos", function(req,res){
-        if(req.session.nome, req.session.senha){
-                produtos.findAll().then(function(produtos){ 
-                        res.render('cadastroProdutos',{produtos: produtos.map(pagamento =>pagamento.toJSON())})
+
+
+
+/*app.get("/cadastroUsuario", function(req,res){
+        if(req.session.nome){
+        usuario.findAll({
+                where:{"nome": req.session.nome}
+        }).then(function(doadores){ 
+        res.render('cadastroUsuario',{doador: doadores.map(pagamento =>pagamento.toJSON())})
+        })
+        }else{
+        res.render("cadastroUsuario") 
+        }
+})*/ 
+app.get("/cadastroProdutos", function(req,res){ 
+        if(req.session.nome, req.session.senha) {
+                usuario.findAll().then(function(usuario){
+                        res.render('cadastroProdutos', {usuario: usuario.map(pagameto => pagameto.toJSON())})
+                })
+        }else{res.render('login')}
+        if(req.session.nome){
+                produtos.findAll({
+                        where: {"nomeOng" : req.session.nome}
+                }).then(function(produtos){ 
+                                res.render('cadastroProdutos',{produtos: produtos.map(pagamento =>pagamento.toJSON())})
                         })
-}else{
-        res.render('login');
-}
+        }else{
+                res.render("cadastroProdutos");}
 
 })
+
+app.get("/listaOng", function(req,res){
+        res.render("listaOng")
+})
+
 
 
 //----------------------------------------------------
@@ -227,6 +252,7 @@ app.post('/cadUsuario',upload.single('colocarImagem'), function(req,res){
                 senha: crypto(req.body.senha),
                 Email:req.body.Email,
                 cnpj:req.body.cnpj,
+                telefone:req.body.telefone,
                 descricao:req.body.descricao,
                 colocarImagem:imagem
         }).then(function(){
@@ -316,6 +342,14 @@ app.get('/update/:id', function(req,res){
 app.get('/updateProdutos/:id', function(req,res){
         produtos.findAll({ where:{'id': req.params.id}}).then(function(produtos){
                 res.render('atualizaProdutos',{produtos: produtos.map(pagamento => pagamento.toJSON())})
+        })
+})
+
+app.get("/listaOng/:nomeOng", function(req,res){
+       produtos.findAll({
+               where: {'nomeOng' : req.params.nomeOng}
+        }).then(function(produto){
+                res.render('listaOng',{produto: produto.map(pagamento => pagamento.toJSON())})
         })
 })
 

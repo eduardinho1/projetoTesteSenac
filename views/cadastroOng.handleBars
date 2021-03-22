@@ -32,6 +32,11 @@
             <input name="senha" type="password"  rows="10" cols="70" class="form-control" id="inputPassword4">
           </div>
         </div>
+
+        <div class="form-group">
+            <label for="inputAddress3">numero da Ong</label>
+            <input name="telefone" type="number" class="form-control" id="numeric" placeholder="número da sua" required>
+          </div>
         
       
        <textarea name="descricao" rows="10" cols="70" class="form-group" placeholder="descrições sobre sua Ong exemplo: telefone,
@@ -51,9 +56,9 @@
   <tr>
     <th>Imagem da Ong</th>
     <th>Nome</th>
-    <th>senha</th>
     <th>cnpj</th>
     <th>Email</th>
+    <th>numeroOng</th>
     <th>descrição da Ong</th>
     <th>atualizar</th>
     <th>excluir</th>
@@ -62,9 +67,9 @@
     <tr>
       <td><img src="static/img/{{colocarImagem}}"></td>
       <td>{{nome}}</td>
-      <td>{{senha}}</td>
       <td>{{cnpj}}</td>
       <td>{{Email}}</td>
+      <td>{{telefone}}</td>
       <td>{{descricao}}</td>
       <td><button class="btn btn-secondary"><a href="/update/{{id}}" class="text-white" >
       atualizar</a></button></td>
