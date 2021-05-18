@@ -4,7 +4,7 @@ const usuario = db.sequelize.define('usuarios' ,{
     tipo: {
         type:db.Sequelize.STRING
     },
-    nome:{
+    usuario:{
         type:db.Sequelize.STRING
     },
     senha:{
@@ -16,6 +16,9 @@ const usuario = db.sequelize.define('usuarios' ,{
     cnpj: {
         type:db.Sequelize.STRING
     },
+    cpf: {
+        type:db.Sequelize.STRING
+    },
     telefone: {
         type:db.Sequelize.STRING
     },
@@ -23,6 +26,9 @@ const usuario = db.sequelize.define('usuarios' ,{
         type:db.Sequelize.STRING
     },
     colocarImagem: {
+        type:db.Sequelize.STRING
+    },
+    Pessoaid:{
         type:db.Sequelize.STRING
     }
     

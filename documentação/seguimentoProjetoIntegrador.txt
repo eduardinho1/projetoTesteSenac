@@ -44,3 +44,5 @@ Cronograma de entrega.
 >Conferir e faszer mais testes.
 
 >Fazer a entrega do site.
+
+> primeira forma normal, segunda forma normal e terceira forma normal ler sobre

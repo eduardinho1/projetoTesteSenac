@@ -10,14 +10,19 @@
     <form action="/cadDoador" method="POST" >
 
          <div class="form-group">
-          <label for="inputNome">Nome Completo</label>
-          <input name="nome" type="text" class="form-control" id="inputAddress" placeholder="ex: Eduardo" required> 
+          <label for="inputNome">Usuario</label>
+          <input name="usuario" type="text" class="form-control" id="inputAddress" placeholder="ex: Eduardo" required> 
         </div>
 
         <div class="form-row">
           <div class="form-group col-md-6">
             <label for="inputEmail4">Email</label>
             <input name="Email" type="email" class="form-control" id="inputEmail4">
+          </div>
+
+          <div class="form-group">
+            <label for="inputAddress2">CPC</label>
+            <input name="cnpj" type="number" class="form-control" id="numeric" placeholder="somente números" required>
           </div>
 
           <div class="form-group col-md-6">
@@ -40,7 +45,7 @@
 <table class="table">
   <tr>
     <th>tipo</th>
-    <th>Nome</th>
+    <th>Usuario</th>
     <th>Email</th>
     <th>atualizar</th>
     <th>excluir</th>
@@ -48,7 +53,7 @@
   {{#each doador}}
     <tr>
       <td>{{tipo}}</td>
-      <td>{{nome}}</td>
+      <td>{{usuario}}</td>
       <td>{{Email}}</td>
       <td><button class="btn btn-secondary"> <a href="/update/{{id}}" class="text-white"> 
       atualizar</a></button></td>

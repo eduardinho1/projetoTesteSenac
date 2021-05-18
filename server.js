@@ -4,9 +4,19 @@ const Ong = require("./models/Ong")
 
 const produtos = require("./models/cadastroProdutos")
 
-//criptografia de dados utilizando a ferramenta chamada criptoJS
- const crypto = require("crypto-md5");
+const pessoa = require("./models/pessoa")
 
+const faleConosco = require("./models/faleConosco")
+
+//----------------------------FINAL--------------------
+
+//para fazer o relacionamento
+usuario.belongsTo(pessoa,{foreignkey: "Pessoaid", allowNull: true})
+
+//criptografia de dados utilizando a ferramenta chamada criptoJS
+const crypto = require("crypto-md5");
+
+const notificar = require("./controler/notificar")
 
 //contante responsavél pela conexão com o express. 
 const express = require("express")
@@ -18,7 +28,6 @@ const multer= require("multer")
 //constantes responsaveis pela ospedagem do handleBars com express e body-parser.
 const handlebars = require("express-handlebars")
 const bodyParser = require("body-parser");
-const { ajaxTransport } = require("jquery");
 
 //configuração handlebars para criar o main.
 app.engine('handlebars', handlebars({defaultLayout:'main'}))
@@ -27,7 +36,7 @@ app.set("view engine",'handlebars')
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json())
 
-
+//Multer para fazer os upload das imagens
 const storage  = multer.diskStorage({
        destination:(req,file,cb) =>{cb(null, 'public/img')},
        filename:(req,file,cb) => {cb(null,file.originalname)}
@@ -35,8 +44,7 @@ const storage  = multer.diskStorage({
 
 const upload = multer({storage})
 
-//Configuração do login usando session
-//Session é reponsavél por hospedar a sessão de cada usuario usando express-session
+//>>>>>>>>>>>>>>>CONFIGURAÇÃO DO SESSION PARA CRIAR AS SESSÕE<<<<<<<<<<<<
 var session = require('express-session');
 
 app.use(session({
@@ -44,9 +52,9 @@ app.use(session({
         resave: true,
         saveUninitialized: true
 }));
+//------------------------FINAL DAS CONFIGURAÇÕES DO SESSION--------------------
 
-//configuração do nodemailer para enviar o email de confirmação 
-
+//>>>>>>>>>>>>CONFIGURAÇÃO DO NODEMAILER PARA ENVIO DE EMAIL<<<<<<<<<<<<<<<
 const nodemailer = require("nodemailer")
 
 const transporter = nodemailer.createTransport({
@@ -73,36 +81,42 @@ transporter.sendMail(mailOptions, function(error, info){
                 console.log(error)
         }else{'email enviado:' + info.response};
 });
+//-------------------FIM DA CONFIGURAÇÃO DO NODEMILER---------------------
+
+// Rota para se fazer possivel o CSS e colocar as imagens
+app.use('/static', express.static(__dirname + '/public'));
 
 
+//>>>>>>> ROTAS DO SITE<<<<<<<<<<<<
 
-
-//req : Recebe do front-end e res: envia para o front-end.
-// render: renderisa a rota e send: somente indica o nome mas não renderisa.
-//findAll(): lista todos os dados do fórmulario.
-//Configuração das rotas
+//>>>>>>>ROTA DA HOME/INICIO<<<<<<<<<
 app.get("/", function(req,res){
+        if(req.session.cpf != undefined){
+                pessoa.findAll({where:{cpf: req.session.cpf}}).then(function(pessoas){
+                res.render("template1",{pessoas: pessoas.map(pagamento => pagamento.toJSON())})
+        })
+        }else{
+        res.render("template1")
+        }   
+})
+
+app.get('/template1',function(req,res){
         res.render("template1")
 })
-
-app.get("/template1",function(req,res){
-        res.render("template1")
-})
+//------------------fIM DA ROTA DE HOME/INICIO----------------------
 
 
-app.get('/login',function(req,res){
-        res.render("login")
-})
 
+//>>>>>>>>>>>>>>>>>ROTAS DOS CADASTROS DE USUARIO, DOADOR, ONG, PESSOA E PRODUTOS<<<<<<<<<<<<<<<<<<<<<<<
 app.get('/escolhaTipo',function(req,res){
         res.render("escolhaTipo")
 })
 
-
+//>>>>>>>>>>>>>>>>>>>>CADASTRO PARA USUARIOS<<<<<<<<<<<<<<<<<<<<<<<<<<
 app.get("/cadastroUsuario", function(req,res){
-        if(req.session.nome){
+        if(req.session.usuario){
         usuario.findAll({
-                where:{"nome": req.session.nome}
+                where:{"usuario": req.session.usuario}
         }).then(function(doadores){ 
         res.render('cadastroUsuario',{doador: doadores.map(pagamento =>pagamento.toJSON())})
         })
@@ -111,10 +125,26 @@ app.get("/cadastroUsuario", function(req,res){
         }
 })
 
+app.post('/cadDoador',function(req,res){
+        usuario.create({
+                tipo:req.body.tipo,
+                usuario:req.body.usuario,
+                senha:req.body.senha,
+                Email:req.body.Email
+        }).then(function(){
+                res.render('login')
+        }).catch(function(){
+                res.send("Erro"+erro)
+        })
+})
+//----------------------------------FIM DA ROTA DE CADASTRO USUARIO----------------------
+
+
+//>>>>>>>>>>>>>>>>>>>>>>>CADASTRO PARA ONG<<<<<<<<<<<<<<<<<<<
 app.get("/cadastroOng", function(req,res){
-        if(req.session.nome){
+        if(req.session.usuario){
         usuario.findAll({
-                where:{'nome': req.session.nome }
+                where:{'usuario': req.session.usuario}
             }).then(function(doador){ 
                 res.render('cadastroOng',{doador: doador.map(pagamento =>pagamento.toJSON())})
                 })}else{
@@ -122,6 +152,116 @@ app.get("/cadastroOng", function(req,res){
                 }
         })
 
+app.post('/cadOng',upload.single('colocarImagem'), function(req,res){
+        if(req.file){
+                var imagem = req.file.originalname
+        }else{
+                 var imagem = "imagemerro.png"
+        }
+        usuario.create({
+                tipo:req.body.tipo,
+                usuario: req.body.usuario,
+                senha: req.body.senha,
+                Email:req.body.Email,
+                cnpj:req.body.cnpj,
+                cpf:req.body.cpf,
+                telefone:req.body.telefone,
+                descricao:req.body.descricao,
+                colocarImagem:imagem,
+        }).then(function(){
+                res.render('login')
+         }).catch(function(){
+                res.send("Erro"+erro)
+        })
+})
+//--------------------------------FIM DA ROTA DE CADASTRO ONG-----------------------
+
+//>>>>>>>>>>>>>>>>>>>>>CADASTRO PARA PESSOA<<<<<<<<<<<<<<<<<<<
+app.get("/cadPessoa", function(req,res){
+        if(req.session.idUsuario == undefined){//para segurança.
+                 res.render("pessoa")
+        }else{
+                res.redirect("/")
+        }
+})
+
+app.post('/cadPessoa',upload.single('colocarImagem'), function(req,res){
+        req.session.cpf = req.body.cpf
+        if(req.file){
+                var imagem = req.file.originalname
+        }else{
+                var imagem = 'imagemerro.png'
+        }
+        pessoa.create({
+                nome:req.body.nome,
+                endereco:req.body.endereco,
+                cpf:req.body.cpf
+        }).then(function(){
+                pessoa.findAll({where: {cpf:req.session.cpf}}).then(function(doadores){
+                        idPessoa = doadores.map(pagamento => pagamento.toJSON().id)
+                        console.log("veio isso"+idPessoa) 
+                        usuario_padrao = req.session.cpf,
+                        senha_padrao = "user123"
+                        usuario.create({
+                            usuario:req.session.cpf,//aqui pega o nome do usuario como CPF 
+                            senha: 'user123', //aqui uma senha pre-definida para quando for fazer o login
+                            foto:imagem,
+                            Pessoaid: idPessoa.toString()    
+                }).then(function(){
+                        res.redirect("/")
+
+                notificar.notificando(
+                        "eduardomeneghettitec@gmail.com",
+                        "123eduardo",
+                        "eduardomeneghettitec@gmail.com",
+                        usuario_padrao,
+                        senha_padrao
+                )
+
+                })
+
+        })
+
+})
+
+})
+//----------------------------FIM DA ROTA DE CADASTRO PESSOAS-----------------------
+
+//>>>>>>>>>>>>>>>>CADASTRO DE PRODUTOS<<<<<<<<<<<<<<<<
+app.get("/cadastroProdutos", function(req,res){ 
+        console.log(req.session.idusuario + "veio isso")
+        if(req.session.idusuario != undefined) {
+                usuario.findAll().then(function(usuario){
+                        res.render('cadastroProdutos', {usuario: usuario.map(pagameto => pagameto.toJSON())})
+                })
+        }else{res.render('login')}
+        /*if(req.body.usuario == req.session.idusuario){
+                produtos.findAll({
+                        where: {"nomeOng" : req.session.idusuario}
+                }).then(function(produtos){ 
+                                res.render('cadastroProdutos',{produtos: produtos.map(pagamento =>pagamento.toJSON())})
+                        })
+        }else{
+                res.render("cadastroProdutos");}*/
+
+})
+
+app.post('/cadProdutos', function(req,res){
+        produtos.create({
+                nomeOng:req.session.usuario,
+                categoriaDoacao:req.body.categoriaDoacao,
+                nomeProduto:req.body.nomeProduto,
+                quantidade:req.body.quantidade,
+                prioridade:req.body.prioridade
+        }).then(function(){
+                res.redirect('doacao')
+        }).catch(function(){
+                res.send("Erro"+erro)
+        })
+})
+//-----------------FIM DA ROTA DE CADPRODUTOS----------------
+
+//>>>>>>>>>>>ROTAS DE DOAÇÃO<<<<<<<<<<<<<<<<<<<<<
 app.get("/doacao", function(req,res){
         res.render("doacao")
 })
@@ -165,27 +305,15 @@ app.get("/animais",function(req,res){
                    res.render('animais',{produtos: produtos.map(pagamento =>pagamento.toJSON())})
                   })
 })
+//------------------FIM DAS ROTAS DE DOAÇÕES---------------------------
 
-app.get("/Ajuda", function(req,res){
-        res.render("Ajuda")
-})
-
+//>>>>>>rota para quem esquecer a senha<<<<<<<
 app.get("/esqueceuSenha", function(req,res){
         res.render("esqueceuSenha")
 })
+//----------Final da rota esqueceu a senha---
 
-app.get("/meuPerfil", function(req,res){
-        if(req.session.nome, req.session.senha){
-                usuario.findAll().then(function(usuario){
-                res.render('meuPerfil', {usuario: usuario.map(pagameto => pagameto.toJSON())})
-         })
-}else{
-        res.render('login');
-}
-
-
-})
-
+//>>>>>>Rota para nossas Ong<<<<<<<<<<
 app.get("/nossasOng", function(req,res){
           usuario.findAll({
                 where:{'tipo': "Ong" }
@@ -193,103 +321,101 @@ app.get("/nossasOng", function(req,res){
                 res.render('nossasOng',{doador: doador.map(pagamento =>pagamento.toJSON())})
                 })
         })
+//------------Final de nossas Ongs-------------
 
-
-
-
-/*app.get("/cadastroUsuario", function(req,res){
-        if(req.session.nome){
-        usuario.findAll({
-                where:{"nome": req.session.nome}
-        }).then(function(doadores){ 
-        res.render('cadastroUsuario',{doador: doadores.map(pagamento =>pagamento.toJSON())})
-        })
-        }else{
-        res.render("cadastroUsuario") 
-        }
-})*/ 
-app.get("/cadastroProdutos", function(req,res){ 
-        if(req.session.nome, req.session.senha) {
-                usuario.findAll().then(function(usuario){
-                        res.render('cadastroProdutos', {usuario: usuario.map(pagameto => pagameto.toJSON())})
-                })
-        }else{res.render('login')}
-        if(req.session.nome){
-                produtos.findAll({
-                        where: {"nomeOng" : req.session.nome}
-                }).then(function(produtos){ 
-                                res.render('cadastroProdutos',{produtos: produtos.map(pagamento =>pagamento.toJSON())})
-                        })
-        }else{
-                res.render("cadastroProdutos");}
-
-})
 
 app.get("/listaOng", function(req,res){
         res.render("listaOng")
 })
 
-
-
-//----------------------------------------------------
-
-
-// Rota para se fazer possivel o CSS e colocar as imagens
-app.use('/static', express.static(__dirname + '/public'));
-
-
-//esse bloco é disparado pelo enviar do formulario
-//upload é a constante do multer responsavél por colocar Imagens/arquivos.
-app.post('/cadUsuario',upload.single('colocarImagem'), function(req,res){
-        if(req.file){
-                var imagem = req.file.originalname
+app.get("/novo", function(req,res){
+        if(req.session.idUsuario != undefined){
+        res.render("nossasOng")
         }else{
-                var imagem = "imagemerro.png"
+                res.redirect("/")
         }
-        usuario.create({
-                tipo:req.body.tipo,
-                nome:req.body.nome,
-                senha: crypto(req.body.senha),
-                Email:req.body.Email,
-                cnpj:req.body.cnpj,
-                telefone:req.body.telefone,
-                descricao:req.body.descricao,
-                colocarImagem:imagem
+        res.render("cadastroUsuario")
+})
+
+
+
+//>>>>>>>>>>>>>>>>>ROTAS PARA EFETUAR O LOGIN<<<<<<<<<<<<<<<<<<<<<<<<
+app.get('/login',function(req,res){
+        res.render("login")
+        req.session.usuariozito = 1
+})
+
+
+app.post('/cadLogin', function(req,res){
+        console.log(req.body)
+ usuario.count({where: {usuario: req.body.usuario, senha: req.body.senha, cnpj: req.body.cnpj}}).then(function(dados){
+         if(dados >= 1){
+         usuario.findAll({where: {usuario: req.body.usuario, senha:req.body.senha}}).then(function(usuario){
+                 idUsuario = usuario.map(pagamento => pagamento.toJSON().id)
+                 id = idUsuario.toString();
+                 req.session.idusuario = id;
+                 cnpj = cnpj.map( c => c.toJSON().cnpj)
+                 cnpj.cnpj.toString();
+                 req.session.cnpj = cnpj;
+                 console.log('veio da session isso -> ' + req.session.idusuario)
+                 res.redirect('/restrita')
+         })
+        }else if(req.session.usuariozito == 1){
+                res.render("login", {mensagem: "usuário ou senha não existem"})
+                req.session.usuariozito ++
+        }else{
+                res.redirect("login")
+        }
+        })
+
+});
+
+app.get("/restrita", function(req,res){
+        if(req.session.idusuario != undefined){
+usuario.findAll({
+        raw: true,
+      //  attibutes:['id'],
+        include:[{
+                model:pessoa,
+                required:true,//elimita registro não encontrado na parental 
+        }],where:{id:req.session.idusuario},
+        //order:[['id']]
+        }).then(function(usuario2){
+                res.render('arearestrita',{usuario2})
+                console.log(usuario2)
+        })
+        }else{
+                res.redirect('/')
+
+        }
+
+})
+
+app.get('/logoff', function(req,res){
+        req.session.destroy(function(){
+                res.render('template1')
+        })
+})
+//-------------FIM DA ROTA PARA LOGIN-------------------------------
+
+//>>>>>>>>>>>>ROTA PARA O FALE CONOSCO<<<<<<<<<
+app.get("/faleConosco", function(req,res){
+        res.render("faleConosco")
+})
+
+app.post("/cadFaleConosco", function(req,res){
+        faleConosco.create({
+                nomeSolicitante:req.body.nomeSolicitante,
+                emailSolicitante:req.body.emailSolicitante,
+                textoSolicitante:req.body.textoSolicitante
         }).then(function(){
-                res.render('login')
+                res.render("template1")
         }).catch(function(){
                 res.send("Erro"+erro)
         })
 })
 
-app.post('/cadDoador',function(req,res){
-        usuario.create({
-                tipo:req.body.tipo,
-                nome:req.body.nome,
-                senha:crypto(req.body.senha),
-                Email:req.body.Email
-        }).then(function(){
-                res.render('login')
-        }).catch(function(){
-                res.send("Erro"+erro)
-        })
-})
-
-
-app.post('/cadProdutos', function(req,res){
-        produtos.create({
-                nomeOng:req.session.nome,
-                categoriaDoacao:req.body.categoriaDoacao,
-                nomeProduto:req.body.nomeProduto,
-                quantidade:req.body.quantidade,
-                prioridade:req.body.prioridade
-        }).then(function(){
-                res.render('doacao')
-        }).catch(function(){
-                res.send("Erro"+erro)
-        })
-})
-//-------------------------------------------------------------------------------------------------
+//----------------------FINAL FALE CONOSCO-------------------
 
 
 //este bloco é responsavél por deletar os cadastro de seus respectivos formularios 
@@ -328,9 +454,7 @@ app.post('/delete1', function(req,res){
         .catch(function(){res.send("não deu certo")})
         })
     })
-
-    
-//--------------------------------------------------------------------------------------------------------
+//-------------------------------------- Fim dos delete -----------------------------------------------
 
 //este bloco é responsavel por modificar/alterar os cadastros de seus respectivos formularios/tabelas.
 app.get('/update/:id', function(req,res){
@@ -355,7 +479,7 @@ app.get("/listaOng/:nomeOng", function(req,res){
 
 
 app.post('/updateUsuario', function(req,res){
-        usuario.update({nome: req.body.nome, senha:req.body.senha},{
+        usuario.update({usuario: req.body.usuario, senha:req.body.senha},{
                 where:{id:req.body.codigo}}
         ).then(function(){
                 usuario.findAll().then(function(doadores){
@@ -368,6 +492,7 @@ app.post('/updateUsuario', function(req,res){
          
         
 })
+
 
 app.post('/updateProdutos', function(req,res){
         produtos.update({ categoriaDoacao:req.body.categoriaDoacao, nomeProduto:req.body.nomeProduto,},{
@@ -383,43 +508,8 @@ app.post('/updateProdutos', function(req,res){
          
         
 })
+//------------------------fim dos update---------------------------------------------
 
+//porta em qual o sistema está rondando
 
-//-------------------------------------------------------------------------------------
-
-//Isso faz login sem consultar se o usuario existe só checando as informação que estão aqui!
-/*app.post('/cadLogin', function(req,res){ 
-        req.session.nome= 'andre';
-        req.session.senha= 'repolho123'
-
-        if(req.session.nome == req.body.nome && req.body.senha == 'repolho123'){
-                res.send("usuario ligado")
-        }else{
-                res.send("usuario não concectado")
-  }
-})*/
-
-//Isso faz login conferindo no banco de dados se o usuario existe e inicia a sessão!
-app.post('/cadLogin', function(req,res){
-        req.session.nome = req.body.nome
-        req.session.senha = crypto(req.body.senha);
- usuario.count({where: {nome: req.session.nome, senha: req.session.senha}}).then(function(dados){
-         if(dados >= 1){
-                 res.render('template1')
-         }else{
-                 res.send('usuario não cadastrado' + dados)
-         }
- }) 
-
-});
-
-//Isso faz logoff desfazendo a função!
-app.get('/logoff', function(req,res){
-        req.session.destroy(function(){
-                res.render('template1')
-        })
-})
-
-
-//--------------------------------------------------------------------------------------
 app.listen(3000);
