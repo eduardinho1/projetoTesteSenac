@@ -1,0 +1,27 @@
+O dono quer um site para ONGs e doadores, onde seja possivel que esses dois usuarios consigam se cadastram, sendo
+que as ONGs tem direito de cadastrar doações necessitadas, ja os usuarios somente vizualizar as doações que as ONGs
+necessitam e entrar em contato com a ONG em caso do doador poder doar. Neste site também existirá login para 
+um melhor controle de usuarios Doador/Ong, além de uma área que mostra quais são as ONgs cadastradas no sistema
+e outra área para as doações onde mostra as categorias dos produtos e os produtos pedidos.  Também deve existir uma
+área de contato para que os usuarios possam relatar falhas de sistemas, bugs ou para mandarem sugestões. 
+
+Funcionalidades: 
+
+cadastro para usuarios = 2 tipos diferentes de cadastro a nível front-end, sendo um para usuarios do tipo
+DOADOR e um para o tipo ONG/ irei armazenar em uma só tabela no banco de dados separando-os por tipos;
+
+login = no login deverá ser baseado nas informações usuario/senha que estão na tabela do banco de dados 
+chamada usuarios, desta forma será necessario um cadastro antes de ser realizado o login. Após o login ser feito
+a sessão será iniciada e nela irei guardar informações como o ususario que está logado e seu tipo;
+
+cadastro doações = No cadastro doações será por onde as Ongs irão cadastrar os produtos que elas estão precisando,
+para isso existirá uma tabela no banco de dados onde irá guardar as informações necessarias para um cadastro de doação;
+(somente Ongs deverão ter acesso a tal funcionalidade)
+
+área das doações = nela estará disposto todas as doações que as ONGs necessitam, sendo que será separada cada doação
+por categoria, ou seja, categoria roupas == camisas, calças etc etc. Nesta funcionalidada os doadores irão conferir
+o que está sendo pedido, qual Ong está pedindo e para doar irá em mais informações e por ai existira as informações
+para que ococorra uma conversação entre Ong e doador. 
+
+Nossas Ongs = Nesta funcionalidade irá mostrar as Ongs que existem no sistema, para isso somente terá uma lista com 
+as Ongs armazenadas no banco de dados; 

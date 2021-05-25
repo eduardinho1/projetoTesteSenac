@@ -230,20 +230,12 @@ app.post('/cadPessoa',upload.single('colocarImagem'), function(req,res){
 //>>>>>>>>>>>>>>>>CADASTRO DE PRODUTOS<<<<<<<<<<<<<<<<
 app.get("/cadastroProdutos", function(req,res){ 
         console.log(req.session.idusuario + "veio isso")
-        if(req.session.idusuario != undefined) {
+        if(req.session.idusuario != undefined && req.session.tipo == 'Ong') {
                 usuario.findAll().then(function(usuario){
                         res.render('cadastroProdutos', {usuario: usuario.map(pagameto => pagameto.toJSON())})
                 })
         }else{res.render('login')}
-        /*if(req.body.usuario == req.session.idusuario){
-                produtos.findAll({
-                        where: {"nomeOng" : req.session.idusuario}
-                }).then(function(produtos){ 
-                                res.render('cadastroProdutos',{produtos: produtos.map(pagamento =>pagamento.toJSON())})
-                        })
-        }else{
-                res.render("cadastroProdutos");}*/
-
+       
 })
 
 app.post('/cadProdutos', function(req,res){
@@ -348,15 +340,15 @@ app.get('/login',function(req,res){
 
 app.post('/cadLogin', function(req,res){
         console.log(req.body)
- usuario.count({where: {usuario: req.body.usuario, senha: req.body.senha, cnpj: req.body.cnpj}}).then(function(dados){
+ usuario.count({where: {usuario: req.body.usuario, senha: req.body.senha }}).then(function(dados){
          if(dados >= 1){
          usuario.findAll({where: {usuario: req.body.usuario, senha:req.body.senha}}).then(function(usuario){
                  idUsuario = usuario.map(pagamento => pagamento.toJSON().id)
                  id = idUsuario.toString();
                  req.session.idusuario = id;
-                 cnpj = cnpj.map( c => c.toJSON().cnpj)
-                 cnpj.cnpj.toString();
-                 req.session.cnpj = cnpj;
+                 tipo1 = usuario.map( c => c.toJSON().tipo)
+                 tipo = tipo1.toString();
+                 req.session.tipo_1 = tipo;
                  console.log('veio da session isso -> ' + req.session.idusuario)
                  res.redirect('/restrita')
          })
