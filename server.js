@@ -230,7 +230,7 @@ app.post('/cadPessoa',upload.single('colocarImagem'), function(req,res){
 //>>>>>>>>>>>>>>>>CADASTRO DE PRODUTOS<<<<<<<<<<<<<<<<
 app.get("/cadastroProdutos", function(req,res){ 
         console.log(req.session.idusuario + "veio isso")
-        if(req.session.idusuario != undefined && req.session.tipo == 'Ong') {
+        if(req.session.idusuario != undefined && req.session.tipo_1 == 'Ong') {
                 usuario.findAll().then(function(usuario){
                         res.render('cadastroProdutos', {usuario: usuario.map(pagameto => pagameto.toJSON())})
                 })
