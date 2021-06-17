@@ -11,7 +11,7 @@ const faleConosco = require("./models/faleConosco")
 //----------------------------FINAL--------------------
 
 //para fazer o relacionamento
-usuario.belongsTo(pessoa,{foreignkey: "Pessoaid", allowNull: true})
+//usuario.belongsTo(pessoa,{foreignkey: "Pessoaid", allowNull: true})
 
 //criptografia de dados utilizando a ferramenta chamada criptoJS
 const crypto = require("crypto-md5");
@@ -105,6 +105,26 @@ app.get('/template1',function(req,res){
 })
 //------------------fIM DA ROTA DE HOME/INICIO----------------------
 
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>ROTA MEU PERFIL<<<<<<<<<<
+app.get("/meuPerfil", function(req,res){
+if(req.session.usuario != undefined && req.session.tipo_1 == 'Ong'){
+        usuario.findAll({
+                where:{"usuario": req.session.usuario}
+        }).then(function(doadores){ 
+                res.render('meuPerfil',{doador: doadores.map(pagamento =>pagamento.toJSON())})
+        })
+}else{
+        if(req.session.usuario != undefined && req.session.tipo_1 == 'doador'){
+                usuario.findAll({
+                        where:{"usuario": req.session.usuario}
+                }).then(function(ong){
+                        res.render('meuPerfil2',{doador: ong.map(pagamento =>pagamento.toJSON())})
+                })
+                        }else{
+                                res.render('login', {mensagem: "Desculpe, Perfil não econtrado, tente fazer o login novamente!"})
+                        }      
+        }
+})
 
 
 //>>>>>>>>>>>>>>>>>ROTAS DOS CADASTROS DE USUARIO, DOADOR, ONG, PESSOA E PRODUTOS<<<<<<<<<<<<<<<<<<<<<<<
@@ -130,7 +150,8 @@ app.post('/cadDoador',function(req,res){
                 tipo:req.body.tipo,
                 usuario:req.body.usuario,
                 senha:req.body.senha,
-                Email:req.body.Email
+                Email:req.body.Email,
+                cpf:req.body.cpf
         }).then(function(){
                 res.render('login')
         }).catch(function(){
@@ -176,65 +197,15 @@ app.post('/cadOng',upload.single('colocarImagem'), function(req,res){
 })
 //--------------------------------FIM DA ROTA DE CADASTRO ONG-----------------------
 
-//>>>>>>>>>>>>>>>>>>>>>CADASTRO PARA PESSOA<<<<<<<<<<<<<<<<<<<
-app.get("/cadPessoa", function(req,res){
-        if(req.session.idUsuario == undefined){//para segurança.
-                 res.render("pessoa")
-        }else{
-                res.redirect("/")
-        }
-})
-
-app.post('/cadPessoa',upload.single('colocarImagem'), function(req,res){
-        req.session.cpf = req.body.cpf
-        if(req.file){
-                var imagem = req.file.originalname
-        }else{
-                var imagem = 'imagemerro.png'
-        }
-        pessoa.create({
-                nome:req.body.nome,
-                endereco:req.body.endereco,
-                cpf:req.body.cpf
-        }).then(function(){
-                pessoa.findAll({where: {cpf:req.session.cpf}}).then(function(doadores){
-                        idPessoa = doadores.map(pagamento => pagamento.toJSON().id)
-                        console.log("veio isso"+idPessoa) 
-                        usuario_padrao = req.session.cpf,
-                        senha_padrao = "user123"
-                        usuario.create({
-                            usuario:req.session.cpf,//aqui pega o nome do usuario como CPF 
-                            senha: 'user123', //aqui uma senha pre-definida para quando for fazer o login
-                            foto:imagem,
-                            Pessoaid: idPessoa.toString()    
-                }).then(function(){
-                        res.redirect("/")
-
-                notificar.notificando(
-                        "eduardomeneghettitec@gmail.com",
-                        "123eduardo",
-                        "eduardomeneghettitec@gmail.com",
-                        usuario_padrao,
-                        senha_padrao
-                )
-
-                })
-
-        })
-
-})
-
-})
-//----------------------------FIM DA ROTA DE CADASTRO PESSOAS-----------------------
 
 //>>>>>>>>>>>>>>>>CADASTRO DE PRODUTOS<<<<<<<<<<<<<<<<
 app.get("/cadastroProdutos", function(req,res){ 
-        console.log(req.session.idusuario + "veio isso")
-        if(req.session.idusuario != undefined && req.session.tipo_1 == 'Ong') {
-                usuario.findAll().then(function(usuario){
-                        res.render('cadastroProdutos', {usuario: usuario.map(pagameto => pagameto.toJSON())})
+        console.log(req.session.usuario + "veio isso")
+        if(req.session.usuario != undefined && req.session.tipo_1 == 'Ong') {
+                usuario.findAll().then(function(usuario1){
+                res.render('cadastroProdutos', {usuario: usuario1.map(pagameto => pagameto.toJSON())})
                 })
-        }else{res.render('login')}
+        }else{res.render('login', {mensagem: "Somente Organizações não Governamentais tem acesso para cadastrar produtos."})}
        
 })
 
@@ -244,7 +215,8 @@ app.post('/cadProdutos', function(req,res){
                 categoriaDoacao:req.body.categoriaDoacao,
                 nomeProduto:req.body.nomeProduto,
                 quantidade:req.body.quantidade,
-                prioridade:req.body.prioridade
+                prioridade:req.body.prioridade,
+                telefone:req.body.telefone
         }).then(function(){
                 res.redirect('doacao')
         }).catch(function(){
@@ -299,12 +271,6 @@ app.get("/animais",function(req,res){
 })
 //------------------FIM DAS ROTAS DE DOAÇÕES---------------------------
 
-//>>>>>>rota para quem esquecer a senha<<<<<<<
-app.get("/esqueceuSenha", function(req,res){
-        res.render("esqueceuSenha")
-})
-//----------Final da rota esqueceu a senha---
-
 //>>>>>>Rota para nossas Ong<<<<<<<<<<
 app.get("/nossasOng", function(req,res){
           usuario.findAll({
@@ -315,10 +281,6 @@ app.get("/nossasOng", function(req,res){
         })
 //------------Final de nossas Ongs-------------
 
-
-app.get("/listaOng", function(req,res){
-        res.render("listaOng")
-})
 
 app.get("/novo", function(req,res){
         if(req.session.idUsuario != undefined){
@@ -342,15 +304,15 @@ app.post('/cadLogin', function(req,res){
         console.log(req.body)
  usuario.count({where: {usuario: req.body.usuario, senha: req.body.senha }}).then(function(dados){
          if(dados >= 1){
-         usuario.findAll({where: {usuario: req.body.usuario, senha:req.body.senha}}).then(function(usuario){
-                 idUsuario = usuario.map(pagamento => pagamento.toJSON().id)
-                 id = idUsuario.toString();
-                 req.session.idusuario = id;
-                 tipo1 = usuario.map( c => c.toJSON().tipo)
+         usuario.findAll({where: {usuario: req.body.usuario, senha:req.body.senha}}).then(function(usuarios){
+                 nomeUsuario = usuarios.map(pagamento => pagamento.toJSON().usuario)
+                 usuarioUm = nomeUsuario.toString();
+                 req.session.usuario = usuarioUm;
+                 tipo1 = usuarios.map( c => c.toJSON().tipo)
                  tipo = tipo1.toString();
                  req.session.tipo_1 = tipo;
-                 console.log('veio da session isso -> ' + req.session.idusuario)
-                 res.redirect('/restrita')
+                 console.log('veio da session isso -> ' + req.session.usuario)
+                 res.redirect('/template1')
          })
         }else if(req.session.usuariozito == 1){
                 res.render("login", {mensagem: "usuário ou senha não existem"})
@@ -362,26 +324,6 @@ app.post('/cadLogin', function(req,res){
 
 });
 
-app.get("/restrita", function(req,res){
-        if(req.session.idusuario != undefined){
-usuario.findAll({
-        raw: true,
-      //  attibutes:['id'],
-        include:[{
-                model:pessoa,
-                required:true,//elimita registro não encontrado na parental 
-        }],where:{id:req.session.idusuario},
-        //order:[['id']]
-        }).then(function(usuario2){
-                res.render('arearestrita',{usuario2})
-                console.log(usuario2)
-        })
-        }else{
-                res.redirect('/')
-
-        }
-
-})
 
 app.get('/logoff', function(req,res){
         req.session.destroy(function(){
@@ -502,6 +444,6 @@ app.post('/updateProdutos', function(req,res){
 })
 //------------------------fim dos update---------------------------------------------
 
-//porta em qual o sistema está rondando
+//porta em qual o sistema está rodando
 
 app.listen(3000);

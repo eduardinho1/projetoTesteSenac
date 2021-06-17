@@ -11,9 +11,9 @@ a img{
     height: 500px;
 }
 
-.rodape{
+/*.rodape{
     height:10vh;
-}
+}*/
 
 
 #textoPrincipal{
@@ -49,8 +49,6 @@ table img{
     height:60px;
 }
 
-.card{
-    margin-left: 70px;
-    margin-right: 70px;
+.logoff{
+    margin-left: 200px;
 }
-

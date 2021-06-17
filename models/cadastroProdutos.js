@@ -15,6 +15,9 @@ const produtos = db.sequelize.define('produtos' ,{
     },
     prioridade:{
         type:db.Sequelize.STRING
+    },
+    telefone:{
+        type:db.Sequelize.STRING
     }
 })  
 

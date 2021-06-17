@@ -1,9 +1,13 @@
-<h1>atualização de usuário</h1>
+
+<div class="card-header bg-white">
+<h1>Atualização de dados</h1>  
+<br>
 {{#each doador}}
     <form action="/updateUsuario" method="POST">
-    <input type="texte" name="codigo" readonly="true" value={{id}}>
-    <input type="text" name="nome" value={{nome}}>
-    <input type="text" name="senha" value={{senha}}>
+    <input type="hidden" name="codigo" readonly="true" value={{id}}>
+    <a> <b>Alterar nome:</b> <input class="bg-info" type="text" name="usuario" value={{usuario}}></a>
+    <a> <b>Alterar senha:</b> <input class="bg-info" type="text" name="senha" value={{senha}}></a>
     <input type="submit" name="conectar">   
     </form>
 {{/each}}
+</div>

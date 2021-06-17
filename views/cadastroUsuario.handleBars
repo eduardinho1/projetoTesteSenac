@@ -21,8 +21,8 @@
           </div>
 
           <div class="form-group">
-            <label for="inputAddress2">CPC</label>
-            <input name="cnpj" type="number" class="form-control" id="numeric" placeholder="somente números" required>
+            <label for="inputAddress2">CPF</label>
+            <input name="cpf" type="number" class="form-control" id="numeric" placeholder="somente números" required>
           </div>
 
           <div class="form-group col-md-6">
@@ -39,47 +39,5 @@
       </div>
 
 <br>
-
-<div class="card-header bg-white form-group">
-    <h1>banco de dados</h1> 
-<table class="table">
-  <tr>
-    <th>tipo</th>
-    <th>Usuario</th>
-    <th>Email</th>
-    <th>atualizar</th>
-    <th>excluir</th>
-  </tr>
-  {{#each doador}}
-    <tr>
-      <td>{{tipo}}</td>
-      <td>{{usuario}}</td>
-      <td>{{Email}}</td>
-      <td><button class="btn btn-secondary"> <a href="/update/{{id}}" class="text-white"> 
-      atualizar</a></button></td>
-      <td>
-        <form method="POST" action="/delete" style="display: inline;" onsubmit="confirmarDelecao(event, this)">
-
-          <input type="hidden" name="id" value="{{id}}">
-          <button class="btn btn-success">Excluir</button>
-                    
-        </form> 
-        
-        </form>
-       
-      </td>
-    </tr>
-  {{/each}}
-</table>
-</div>
 </div>
 
-<script>
-    function confirmarDelecao(event, form){
-        event.preventDefault();
-        var decision = confirm("Tem certeza em deletar essa categoria?")
-        if(decision){
-            form.submit();
-        }
-    }
-</script>

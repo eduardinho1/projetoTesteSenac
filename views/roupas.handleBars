@@ -1,11 +1,11 @@
 <br>
-<div class="container">
+<div class="container-fluid">
   <div class="card">
     <div class="card-header car">
     <h1>ROUPAS
     </h1> 
     </div>
-<form action="/cadProdutos" method="POST" >
+<div class="table-responsive">
 <table class="table">
   <tr>
     <th>Nome Ong</th>
@@ -20,8 +20,8 @@
       <td>{{nomeProduto}}</td>
       <td>{{quantidade}}</td>
       <td>{{prioridade}}</td>
-      <td><button class="btn btn-secondary"> <a href="/" class=" text-white"> Doar</a></button></td>
+      <td><a href="listaOng/{{nomeOng}}" class="text-white"><button class="btn btn-secondary"> + informações</button></a></td>
     </tr>
   {{/each}}
 </table>
-</form>
+</div>

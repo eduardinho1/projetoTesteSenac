@@ -7,24 +7,24 @@
     <h1>ALIMENTOS
     </h1>  
     </div>
-<form action="/cadProdutos" method="POST" >
+<div class="table-responsive">
 <table class="table">
   <tr>
-    <th>nome da Ong</th>
+    <th>nome Ong</th>
     <th>nomeProduto</th>
     <th>quantidade</th>
     <th>prioridade</th>
-    <th>Quero doar</th>
+    <th>Doar!</th>
   </tr>
   {{#each produtos}}
     <tr>
-      <td></td>
+      <td>{{nomeOng}}</td>
       <td>{{nomeProduto}}</td>
       <td>{{quantidade}}</td>
       <td>{{prioridade}}</td>
-      <td><button class="btn btn-secondary"> <a href="/" class=" text-white"> Doar</a></button></td>
+      <td><a href="listaOng/{{nomeOng}}" class="text-white"><button class="btn btn-secondary"> + informações</button></a></td>
     </tr>
   {{/each}}
 </table>
-</form>
+</div>
 </div>

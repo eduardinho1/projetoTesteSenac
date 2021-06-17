@@ -8,7 +8,10 @@
     </div>
             <form action="/cadOng" method="POST" enctype="multipart/form-data">
 
-          <input name="colocarImagem" type="file" class="form-group" >
+          <div class="Form-group"> 
+            <label for="inputImage">Coloque a Imagem da Ong:</label>
+            <input name="colocarImagem" type="file" class="mix-auto form-group" style="width: 137px;">
+          </div>
         
           <div class="form-group">
             <label for="inputAddress2">Nome da ONG</label>
@@ -39,7 +42,7 @@
           </div>
         
       
-       <textarea name="descricao" rows="10" cols="70" class="form-group" placeholder="descrições sobre sua Ong exemplo: telefone,
+       <textarea name="descricao" class="form-group" placeholder="descrições sobre sua Ong exemplo: telefone,
        endereço, hitoria, horario de funcionamento etc etc." required></textarea>
 
         <input type="hidden" name="tipo" value="Ong">
@@ -49,56 +52,7 @@
       </div>
 
 <br>
-
-<div class="card-header bg-white">
-    <h1>banco de dados</h1> 
-  <table class="table">
-  <tr>
-    <th>Imagem da Ong</th>
-    <th>Nome</th>
-    <th>cnpj</th>
-    <th>Email</th>
-    <th>numeroOng</th>
-    <th>descrição da Ong</th>
-    <th>atualizar</th>
-    <th>excluir</th>
-  </tr>
-  {{#each doador}}
-    <tr>
-      <td><img src="static/img/{{colocarImagem}}"></td>
-      <td>{{nome}}</td>
-      <td>{{cnpj}}</td>
-      <td>{{Email}}</td>
-      <td>{{telefone}}</td>
-      <td>{{descricao}}</td>
-      <td><button class="btn btn-secondary"><a href="/update/{{id}}" class="text-white" >
-      atualizar</a></button></td>
-       <td>
-        <form method="POST" action="/delete1" style="display: inline;" onsubmit="confirmarDelecao(event, this)">
-
-          <input type="hidden" name="id" value="{{id}}">
-          <button class="btn btn-success">Excluir</button>
-                    
-        </form> 
-        
-        </form>
-       
-      </td>
-    </tr>
-  {{/each}}
-</table>
 </div>
-</div>
-
-<script>
-    function confirmarDelecao(event, form){
-        event.preventDefault();
-        var decision = confirm("Tem certeza em deletar essa categoria?")
-        if(decision){
-            form.submit();
-        }
-    }
-</script>
 
       
       

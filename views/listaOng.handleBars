@@ -6,13 +6,14 @@
     <h1> Mais Informações Ong
     </h1>  
     </div>
-<form action="/listaOng" method="POST" >
+<div class="table-responsive">
 <table class="table">
   <tr>
     <th>Nome da Ong</th>
     <th>Prdouto Necessitado</th>
     <th>Quantidade</th>
     <th>Prioridade</th>
+    <th>Número para contato</th>
   </tr>
   {{#each produto}}
 <tr>
@@ -20,6 +21,8 @@
     <td>{{nomeProduto}}</td>
     <td>{{quantidade}}</td>
     <td>{{prioridade}}</td>
+    <td>{{telefone}}</td>
 </tr>
  {{/each}}
 </table>
+</div>

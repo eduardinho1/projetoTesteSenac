@@ -6,30 +6,24 @@
     <h4>Olá <b>{{usuario}}</b> esperamos que esteja muito bem!</h4>
 {{/each}}
 <br>
-  <div class="table-responsive">
-  <table class="table">
+<div class="table-responsive">
+<table class="table">
   <tr>
-    <th>Imagem da Ong</th>
+    <th>tipo</th>
     <th>Nome</th>
-    <th>cnpj</th>
     <th>Email</th>
-    <th>numeroOng</th>
-    <th>descrição da Ong</th>
     <th>atualizar</th>
     <th>excluir</th>
   </tr>
   {{#each doador}}
     <tr>
-      <td><img src="static/img/{{colocarImagem}}"></td>
+      <td>{{tipo}}</td>
       <td>{{usuario}}</td>
-      <td>{{cnpj}}</td>
       <td>{{Email}}</td>
-      <td>{{telefone}}</td>
-      <td>{{descricao}}</td>
-      <td><button class="btn btn-success"><a href="/update/{{id}}" class="text-white" >
+      <td><button class="btn btn-success"> <a href="/update/{{id}}" class="text-white"> 
       atualizar</a></button></td>
-       <td>
-        <form method="POST" action="/delete1" style="display: inline;" onsubmit="confirmarDelecao(event, this)">
+      <td>
+        <form method="POST" action="/delete" style="display: inline;" onsubmit="confirmarDelecao(event, this)">
 
           <input type="hidden" name="id" value="{{id}}">
           <button class="btn btn-danger">Excluir</button>
@@ -45,7 +39,6 @@
 </div>
 </div>
 
-
 <script>
     function confirmarDelecao(event, form){
         event.preventDefault();
@@ -55,4 +48,3 @@
         }
     }
 </script>
-

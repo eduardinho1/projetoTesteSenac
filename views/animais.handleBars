@@ -1,20 +1,20 @@
 
 <br>
-<div class="container">
+<div class="h-auto d-inline-block container-fluid" style="height: auto;">
   <div class="card">
     <div class="card-header">
     <h1>Animais
     </h1>  
     <h6> Por aqui são feitas doações para ajudar animais, como cachorros, gatos etc.</h6>
     </div>
-<form action="/cadProdutos" method="POST" >
+<div class="table-responsive">
 <table class="table">
   <tr>
-    <th>nome Ong</th>
-    <th>nome Produto</th>
+    <th>Ong</th>
+    <th>Produto</th>
     <th>quantidade</th>
     <th>prioridade</th>
-    <th>Quero doar</th>
+    <th>Doar!</th>
   </tr>
   {{#each produtos}}
     <tr>
@@ -22,9 +22,10 @@
       <td>{{nomeProduto}}</td>
       <td>{{quantidade}}</td>
       <td>{{prioridade}}</td>
-      <td><button class="btn btn-secondary"> <a href="listaOng/{{nomeOng}}" class="text-white">informações</a></button></td>
+      <td><a href="listaOng/{{nomeOng}}" class="text-white"><button class="btn btn-secondary"> + informações</button></a></td>
     </tr>
   {{/each}}
 </table>
-</form>
+</div>
+</div>
 </div>
